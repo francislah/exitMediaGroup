@@ -1,0 +1,70 @@
+{
+  "key": "section01",
+  "anchorId": "hero",
+  "kicker": "Section 01",
+  "heading": "Hero",
+  "summary": "Entree visuelle avec fumee coloree, dominos et reveal progressif.",
+  "seo": {
+    "title": "exitMediaGroup | Agence creative independante",
+    "description": "Agence creative independante. Contenus, experiences et plateformes pour faire avancer les marques."
+  },
+  "heroTitlePrimary": "Agence creative",
+  "heroTitleSecondary": "independante.",
+  "introLine": "On imagine des contenus, des experiences et des plateformes pour faire avancer les marques.",
+  "scrollCueLabel": "Scroll",
+  "revealWords": [
+    "On",
+    "imagine",
+    "des",
+    "contenus",
+    "des",
+    "experiences",
+    "et",
+    "des",
+    "plateformes"
+  ],
+  "topNav": {
+    "links": [
+      {
+        "label": "Le Studio",
+        "href": "#who-we-are"
+      },
+      {
+        "label": "Expertise",
+        "href": "#expertise"
+      },
+      {
+        "label": "Projets",
+        "href": "#projects"
+      },
+      {
+        "label": "Contact",
+        "href": "#footer"
+      }
+    ],
+    "ctaLabel": "On Brainstorme",
+    "ctaHref": "/contact"
+  },
+  "smokeVideo": {
+    "src": "/media/hero/smoke_av1.webm",
+    "poster": "/media/hero/smoke_poster.jpg"
+  },
+  "showreelVideo": {
+    "src": "/media/hero/smoke_av1.webm",
+    "poster": "/media/hero/smoke_poster.jpg"
+  },
+  "dominos": [
+    {
+      "id": "domino-left",
+      "role": "left"
+    },
+    {
+      "id": "domino-center",
+      "role": "center"
+    },
+    {
+      "id": "domino-right",
+      "role": "right"
+    }
+  ]
+}

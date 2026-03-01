@@ -1,0 +1,25 @@
+---
+import type { HomeSectionCommon } from "../../lib/content-types";
+
+interface Props {
+  section: HomeSectionCommon;
+  className?: string;
+}
+
+const { section, className = "" } = Astro.props;
+---
+
+<section
+  id={section.anchorId}
+  data-section={section.key}
+  class={`border-b border-white/10 px-6 py-20 md:px-10 lg:px-14 ${className}`}
+>
+  <div class="mx-auto max-w-6xl">
+    <p class="type-kicker">{section.kicker}</p>
+    <h2 class="type-title mt-3 tracking-tight">{section.heading}</h2>
+    <p class="text-muted mt-4 max-w-2xl">{section.summary}</p>
+    <div class="mt-8">
+      <slot />
+    </div>
+  </div>
+</section>

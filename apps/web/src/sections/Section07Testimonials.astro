@@ -1,0 +1,374 @@
+---
+import type { HomeSectionByKey } from "../lib/content-types";
+
+interface Props {
+  section: HomeSectionByKey<"section07">;
+}
+
+const { section } = Astro.props;
+---
+
+<section id={section.anchorId} data-section={section.key} class="testimonials-section">
+  <div class="testimonials-shell" data-testimonials-root>
+    <p class="testimonials-kicker">{section.kicker}</p>
+
+    <div class="testimonials-stage" data-stage aria-live="polite">
+      {
+        section.testimonials.map((item, index) => (
+          <article
+            class="testimonial-card"
+            data-testimonial
+            data-index={index}
+            data-active={index === 0 ? "true" : "false"}
+            aria-hidden={index === 0 ? "false" : "true"}
+          >
+            <blockquote class="testimonial-quote">“ {item.quote} ”</blockquote>
+
+            <div class="testimonial-meta">
+              <p class="testimonial-author">{item.author}</p>
+              <p class="testimonial-role">{item.role}</p>
+              <p class="testimonial-company">{item.company}</p>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+
+    <div class="testimonials-controls">
+      <button
+        type="button"
+        class="testimonial-nav testimonial-nav-prev"
+        data-direction="prev"
+        aria-label="Previous testimonial"
+      >
+        <span aria-hidden="true">&#8249;</span>
+      </button>
+      <div class="testimonials-dominos" role="tablist" aria-label={section.heading}>
+        {
+          section.testimonials.map((_, index) => (
+            <button
+              type="button"
+              class="testimonials-domino"
+              role="tab"
+              data-domino
+              data-index={index}
+              data-active={index === 0 ? "true" : "false"}
+              aria-label={`Testimonial ${index + 1}`}
+              aria-selected={index === 0 ? "true" : "false"}
+            ></button>
+          ))
+        }
+      </div>
+      <button
+        type="button"
+        class="testimonial-nav testimonial-nav-next"
+        data-direction="next"
+        aria-label="Next testimonial"
+      >
+        <span aria-hidden="true">&#8250;</span>
+      </button>
+    </div>
+  </div>
+</section>
+
+<style>
+  .testimonials-section {
+    border-bottom: 1px solid color-mix(in srgb, var(--color-border-subtle) 65%, transparent);
+    background: #f0eef5;
+    color: #1e1444;
+    padding: clamp(3.8rem, 10vw, 8rem) clamp(1rem, 4vw, 2.5rem);
+  }
+
+  .testimonials-shell {
+    width: min(100%, 72rem);
+    margin: 0 auto;
+    display: grid;
+    justify-items: center;
+    gap: clamp(1.4rem, 3vw, 2.2rem);
+    touch-action: pan-y;
+    user-select: none;
+  }
+
+  .testimonials-kicker {
+    margin: 0;
+    font-size: clamp(0.72rem, 0.68rem + 0.2vw, 0.9rem);
+    letter-spacing: 0.17em;
+    font-weight: 760;
+    text-transform: uppercase;
+    text-align: center;
+    color: #6d3bcc;
+  }
+
+  .testimonials-stage {
+    position: relative;
+    width: min(100%, 56rem);
+    min-height: clamp(18.5rem, 47vw, 22rem);
+  }
+
+  .testimonial-card {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    align-content: center;
+    justify-items: center;
+    text-align: center;
+    gap: clamp(1.2rem, 2.6vw, 2rem);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 320ms var(--motion-ease-standard);
+  }
+
+  .testimonial-card[data-active="true"] {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .testimonial-quote {
+    margin: 0;
+    max-width: 25ch;
+    font-family: var(--font-family-display);
+    font-size: clamp(1.85rem, 1.1rem + 2.2vw, 3.25rem);
+    font-style: italic;
+    font-weight: 700;
+    line-height: 1.18;
+    letter-spacing: 0.01em;
+    color: #ec8d28;
+    text-wrap: balance;
+  }
+
+  .testimonial-meta {
+    display: grid;
+    gap: 0.3rem;
+  }
+
+  .testimonial-author {
+    margin: 0;
+    font-size: clamp(0.9rem, 0.82rem + 0.3vw, 1.2rem);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-weight: 800;
+    color: #6d3bcc;
+  }
+
+  .testimonial-role {
+    margin: 0;
+    font-size: clamp(0.95rem, 0.84rem + 0.26vw, 1.15rem);
+    font-weight: 650;
+    color: #20184a;
+  }
+
+  .testimonial-company {
+    margin: 0;
+    font-size: clamp(0.95rem, 0.82rem + 0.3vw, 1.12rem);
+    font-style: italic;
+    font-weight: 600;
+    color: #20184a;
+  }
+
+  .testimonials-controls {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: end;
+    width: min(100%, 24rem);
+  }
+
+  .testimonial-nav {
+    border: 1px solid color-mix(in srgb, #6d3bcc 38%, white 62%);
+    border-radius: 999px;
+    background: color-mix(in srgb, white 42%, transparent);
+    padding: 0;
+    height: 3rem;
+    min-width: 2.25rem;
+    cursor: pointer;
+    color: #6d3bcc;
+    display: grid;
+    place-items: center;
+    transition:
+      border-color 180ms var(--motion-ease-standard),
+      background-color 180ms var(--motion-ease-standard),
+      color 180ms var(--motion-ease-standard);
+  }
+
+  .testimonial-nav:hover {
+    border-color: #6d3bcc;
+    background: color-mix(in srgb, white 76%, transparent);
+    color: #4e28ac;
+  }
+
+  .testimonial-nav-prev {
+    justify-self: start;
+  }
+
+  .testimonial-nav-next {
+    justify-self: end;
+  }
+
+  .testimonial-nav:focus-visible {
+    outline: 2px solid #6d3bcc;
+    outline-offset: 2px;
+    border-radius: 0.5rem;
+  }
+
+  .testimonials-dominos {
+    display: flex;
+    align-items: end;
+    gap: clamp(0.5rem, 1.2vw, 0.86rem);
+  }
+
+  .testimonials-domino {
+    width: clamp(0.28rem, 0.24rem + 0.08vw, 0.38rem);
+    height: clamp(1.3rem, 0.9rem + 0.9vw, 1.85rem);
+    border: 0;
+    border-radius: 999px;
+    padding: 0;
+    cursor: pointer;
+    opacity: 0.32;
+    transition:
+      height 280ms var(--motion-ease-standard),
+      opacity 280ms var(--motion-ease-standard),
+      transform 280ms var(--motion-ease-standard);
+    background: color-mix(in srgb, #6d3bcc 24%, white 76%);
+  }
+
+  .testimonials-domino:nth-child(3n + 1) {
+    background: color-mix(in srgb, #6d3bcc 26%, white 74%);
+  }
+
+  .testimonials-domino:nth-child(3n + 2) {
+    background: color-mix(in srgb, #a772d1 36%, white 64%);
+  }
+
+  .testimonials-domino:nth-child(3n) {
+    background: color-mix(in srgb, #ec8d28 34%, white 66%);
+  }
+
+  .testimonials-domino[data-active="true"] {
+    height: clamp(2.5rem, 1.7rem + 1.6vw, 3.6rem);
+    opacity: 1;
+    transform: translateY(-0.06rem);
+  }
+
+  .testimonials-domino:focus-visible {
+    outline: 2px solid #6d3bcc;
+    outline-offset: 2px;
+  }
+
+  @media (max-width: 42rem) {
+    .testimonials-stage {
+      min-height: clamp(20rem, 94vw, 24rem);
+    }
+
+    .testimonial-quote {
+      max-width: 15ch;
+      line-height: 1.16;
+    }
+
+    .testimonials-controls {
+      width: min(100%, 16rem);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .testimonial-card,
+    .testimonials-domino {
+      transition: none;
+    }
+  }
+</style>
+
+<script is:inline>
+  (() => {
+    const roots = document.querySelectorAll("[data-testimonials-root]");
+    if (!roots.length) return;
+
+    roots.forEach((rootNode) => {
+      if (!(rootNode instanceof HTMLElement)) return;
+
+      const cards = Array.from(rootNode.querySelectorAll("[data-testimonial]")).filter(
+        (node) => node instanceof HTMLElement,
+      );
+      const dominos = Array.from(rootNode.querySelectorAll("[data-domino]")).filter(
+        (node) => node instanceof HTMLButtonElement,
+      );
+      const navButtons = Array.from(rootNode.querySelectorAll(".testimonial-nav")).filter(
+        (node) => node instanceof HTMLButtonElement,
+      );
+      const stage = rootNode.querySelector("[data-stage]");
+
+      if (!cards.length || !dominos.length || !(stage instanceof HTMLElement)) return;
+
+      let currentIndex = cards.findIndex((card) => card.getAttribute("data-active") === "true");
+      if (currentIndex < 0) currentIndex = 0;
+      let isAnimating = false;
+      let touchStartX = 0;
+      let touchStartY = 0;
+
+      const setIndex = (nextIndex) => {
+        if (isAnimating || nextIndex === currentIndex || nextIndex < 0 || nextIndex >= cards.length) {
+          return;
+        }
+
+        isAnimating = true;
+        const current = cards[currentIndex];
+        const next = cards[nextIndex];
+
+        current.setAttribute("data-active", "false");
+        current.setAttribute("aria-hidden", "true");
+        next.setAttribute("data-active", "true");
+        next.setAttribute("aria-hidden", "false");
+
+        dominos.forEach((domino, dominoIndex) => {
+          const isActive = dominoIndex === nextIndex;
+          domino.setAttribute("data-active", isActive ? "true" : "false");
+          domino.setAttribute("aria-selected", isActive ? "true" : "false");
+        });
+
+        currentIndex = nextIndex;
+        window.setTimeout(() => {
+          isAnimating = false;
+        }, 360);
+      };
+
+      const goNext = () => setIndex((currentIndex + 1) % cards.length);
+      const goPrev = () => setIndex((currentIndex - 1 + cards.length) % cards.length);
+
+      dominos.forEach((domino, index) => {
+        domino.addEventListener("click", () => setIndex(index));
+      });
+
+      navButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          const direction = button.getAttribute("data-direction");
+          if (direction === "next") goNext();
+          if (direction === "prev") goPrev();
+        });
+      });
+
+      stage.addEventListener("keydown", (event) => {
+        if (event.key === "ArrowRight") {
+          event.preventDefault();
+          goNext();
+        } else if (event.key === "ArrowLeft") {
+          event.preventDefault();
+          goPrev();
+        }
+      });
+
+      stage.tabIndex = 0;
+
+      stage.addEventListener("pointerdown", (event) => {
+        touchStartX = event.clientX;
+        touchStartY = event.clientY;
+      });
+
+      stage.addEventListener("pointerup", (event) => {
+        const deltaX = event.clientX - touchStartX;
+        const deltaY = event.clientY - touchStartY;
+        const isHorizontalIntent = Math.abs(deltaX) > Math.abs(deltaY);
+        if (!isHorizontalIntent || Math.abs(deltaX) < 36) return;
+        if (deltaX < 0) goNext();
+        if (deltaX > 0) goPrev();
+      });
+    });
+  })();
+</script>

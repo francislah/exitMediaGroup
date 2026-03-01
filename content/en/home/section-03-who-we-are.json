@@ -1,0 +1,18 @@
+{
+  "key": "section03",
+  "anchorId": "who-we-are",
+  "kicker": "OK. BUT WHAT DO WE DO EXACTLY?",
+  "heading": "We help brands find their voice and claim their place.",
+  "summary": "From strategy to distribution, ideas are developed, produced, and set in motion.",
+  "body": "An orchestrated sequence, for projects that are coherent, solid, and long-lasting.",
+  "ctaLabel": "Let's Brainstorm",
+  "ctaHref": "#contact",
+  "video": {
+    "src": "/media/hero/smoke_av1.webm",
+    "poster": "/media/hero/smoke_poster.jpg",
+    "autoplay": true,
+    "muted": true,
+    "loop": true,
+    "playLabel": "Play video"
+  }
+}

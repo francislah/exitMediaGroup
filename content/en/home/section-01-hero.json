@@ -1,0 +1,70 @@
+{
+  "key": "section01",
+  "anchorId": "hero",
+  "kicker": "Section 01",
+  "heading": "Hero",
+  "summary": "Visual entry with smoke layers, domino markers, and progressive reveal.",
+  "seo": {
+    "title": "exitMediaGroup | Independent creative agency",
+    "description": "Independent creative agency building content, experiences, and platforms that move brands forward."
+  },
+  "heroTitlePrimary": "Creative agency",
+  "heroTitleSecondary": "independent.",
+  "introLine": "We build content, experiences, and platforms to move brands forward.",
+  "scrollCueLabel": "Scroll",
+  "revealWords": [
+    "We",
+    "build",
+    "content",
+    "experiences",
+    "and",
+    "platforms",
+    "that",
+    "move",
+    "brands"
+  ],
+  "topNav": {
+    "links": [
+      {
+        "label": "Le Studio",
+        "href": "#who-we-are"
+      },
+      {
+        "label": "Expertise",
+        "href": "#expertise"
+      },
+      {
+        "label": "Projects",
+        "href": "#projects"
+      },
+      {
+        "label": "Contact",
+        "href": "#footer"
+      }
+    ],
+    "ctaLabel": "Let's Brainstorm",
+    "ctaHref": "/contact"
+  },
+  "smokeVideo": {
+    "src": "/media/hero/smoke_av1.webm",
+    "poster": "/media/hero/smoke_poster.jpg"
+  },
+  "showreelVideo": {
+    "src": "/media/hero/smoke_av1.webm",
+    "poster": "/media/hero/smoke_poster.jpg"
+  },
+  "dominos": [
+    {
+      "id": "domino-left",
+      "role": "left"
+    },
+    {
+      "id": "domino-center",
+      "role": "center"
+    },
+    {
+      "id": "domino-right",
+      "role": "right"
+    }
+  ]
+}

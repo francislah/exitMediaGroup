@@ -1,0 +1,33 @@
+{
+  "key": "section05",
+  "anchorId": "expertise",
+  "kicker": "NOTRE TERRAIN DE JEU",
+  "heading": "Expertise",
+  "summary": "Quatre expertises complementaires au service de votre marque.",
+  "panels": [
+    {
+      "id": "brand-entertainment",
+      "label": "01",
+      "title": "Brand Entertainment",
+      "description": "On conçoit des formats narratifs puissants, pensés pour engager et faire rayonner les marques.\n\nDu contenu qui marque, divertit et laisse une empreinte."
+    },
+    {
+      "id": "strategie-branding",
+      "label": "02",
+      "title": "Stratégie & Branding",
+      "description": "On pose des bases claires et structurantes pour votre marque. Positionnement, repères visuels, outils stratégiques : tout est pensé pour assurer cohérence et impact dans le temps.\n\nUne identité forte. Un message qui résonne."
+    },
+    {
+      "id": "production-video-podcast",
+      "label": "03",
+      "title": "Production vidéo & Podcast",
+      "description": "On développe et réalise des contenus ambitieux pour de nombreuses marques. Publicités, séries, documentaires, variétés, spectacles, formats sociaux : chaque production est agile, précise et performante sur toutes les plateformes.\n\nDu concept à la diffusion."
+    },
+    {
+      "id": "technologie-innovation",
+      "label": "04",
+      "title": "Technologie et Innovation",
+      "description": "On conçoit des expériences immersives en AR, VR et IA pour des événements, des marques et des entreprises. Chaque activation est pensée pour être utile, engageante et alignée sur un objectif précis.\n\nActivations technologiques expérientielles."
+    }
+  ]
+}

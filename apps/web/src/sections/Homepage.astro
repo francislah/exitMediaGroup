@@ -1,0 +1,32 @@
+---
+import type { HomePageContent } from "../lib/content-types";
+import type { Locale } from "../lib/i18n";
+import Section01Hero from "./Section01Hero.astro";
+import Section02Clients from "./Section02Clients.astro";
+import Section03WhoWeAre from "./Section03WhoWeAre.astro";
+import Section04Method from "./Section04Method.astro";
+import Section05Expertise from "./Section05Expertise.astro";
+import Section06Projects from "./Section06Projects.astro";
+import Section07Testimonials from "./Section07Testimonials.astro";
+import Section08PhantomVideo from "./Section08PhantomVideo.astro";
+import Section09Footer from "./Section09Footer.astro";
+
+interface Props {
+  content: HomePageContent;
+  locale: Locale;
+}
+
+const { content, locale } = Astro.props;
+---
+
+<main>
+  <Section01Hero section={content.sections.section01} />
+  <Section02Clients section={content.sections.section02} />
+  <Section03WhoWeAre section={content.sections.section03} />
+  <Section04Method section={content.sections.section04} />
+  <Section05Expertise section={content.sections.section05} />
+  <Section06Projects section={content.sections.section06} />
+  <Section07Testimonials section={content.sections.section07} />
+  <Section08PhantomVideo section={content.sections.section08} />
+  <Section09Footer section={content.sections.section09} locale={locale} />
+</main>

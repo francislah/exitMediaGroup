@@ -1,0 +1,89 @@
+:root {
+  /* Color system */
+  --color-bg-canvas: #070a18;
+  --color-bg-surface: #111733;
+  --color-bg-elevated: #1a2450;
+  --color-bg-overlay: rgba(255, 255, 255, 0.06);
+  --color-border-subtle: rgba(255, 255, 255, 0.14);
+  --color-text-primary: #f6f8ff;
+  --color-text-secondary: #cad1ef;
+  --color-text-muted: #94a0c9;
+  --color-accent-primary: #7f72ff;
+  --color-accent-secondary: #ffb13b;
+  --color-accent-tertiary: #3db5ff;
+  --color-accent-emphasis: #ff5ba8;
+  --gradient-hero-smoke:
+    radial-gradient(
+      120% 120% at 12% 8%,
+      rgba(61, 181, 255, 0.48) 0%,
+      transparent 56%
+    ),
+    radial-gradient(
+      130% 120% at 88% 10%,
+      rgba(255, 91, 168, 0.44) 0%,
+      transparent 58%
+    ),
+    radial-gradient(
+      100% 120% at 40% 84%,
+      rgba(127, 114, 255, 0.4) 0%,
+      transparent 66%
+    ),
+    linear-gradient(138deg, #070a18 0%, #1a2450 52%, #0f163b 100%);
+  --gradient-impact: linear-gradient(
+    96deg,
+    var(--color-accent-secondary) 0%,
+    var(--color-accent-emphasis) 48%,
+    var(--color-accent-primary) 100%
+  );
+
+  /* Spacing scale */
+  --space-2xs: 0.25rem;
+  --space-xs: 0.5rem;
+  --space-sm: 0.75rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 4rem;
+  --space-4xl: 6rem;
+
+  /* Radius scale */
+  --radius-sm: 0.5rem;
+  --radius-md: 0.875rem;
+  --radius-lg: 1.25rem;
+  --radius-xl: 1.75rem;
+  --radius-pill: 9999px;
+
+  /* Layering */
+  --z-base: 0;
+  --z-content: 10;
+  --z-sticky: 40;
+  --z-overlay: 80;
+  --z-modal: 100;
+
+  /* Breakpoints (reference tokens) */
+  --breakpoint-sm: 30rem;
+  --breakpoint-md: 48rem;
+  --breakpoint-lg: 64rem;
+  --breakpoint-xl: 80rem;
+
+  /* Typography */
+  --font-family-display:
+    "Space Grotesk", "Sora", "Avenir Next", "Segoe UI", sans-serif;
+  --font-family-body:
+    "Manrope", "Avenir Next", "Segoe UI", "Helvetica Neue", sans-serif;
+  --font-size-kicker: clamp(0.69rem, 0.66rem + 0.2vw, 0.78rem);
+  --font-size-body: clamp(0.95rem, 0.9rem + 0.24vw, 1.08rem);
+  --font-size-title: clamp(1.7rem, 1.2rem + 2vw, 3.25rem);
+  --font-size-display: clamp(2rem, 1.2rem + 3.4vw, 4.75rem);
+  --line-height-tight: 1.08;
+  --line-height-base: 1.5;
+  --letter-spacing-kicker: 0.18em;
+
+  /* Motion */
+  --motion-duration-fast: 180ms;
+  --motion-duration-base: 320ms;
+  --motion-duration-slow: 560ms;
+  --motion-ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --motion-ease-expressive: cubic-bezier(0.22, 1, 0.36, 1);
+}

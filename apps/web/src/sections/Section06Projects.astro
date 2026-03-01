@@ -1,0 +1,631 @@
+---
+import type { HomeSectionByKey } from "../lib/content-types";
+
+interface Props {
+  section: HomeSectionByKey<"section06">;
+}
+
+const { section } = Astro.props;
+const projects = section.projects.slice(0, 6);
+---
+
+<section
+  id={section.anchorId}
+  data-section={section.key}
+  class="projects-section"
+>
+  <div
+    class="projects-shell"
+    data-projects-root
+    data-enhanced="false"
+    data-projects-json={encodeURIComponent(JSON.stringify(projects))}
+  >
+    <p class="projects-orbit-title">{section.orbitTitle}</p>
+
+    <div
+      class="projects-stage"
+      data-projects-stage
+      tabindex="0"
+      aria-label={`${section.heading} orbit scene`}
+    >
+      <button
+        type="button"
+        class="projects-nav projects-nav-left"
+        data-spin-left
+        aria-label="Spin left"
+      >
+        <span aria-hidden="true">&#8249;</span>
+      </button>
+      <button
+        type="button"
+        class="projects-nav projects-nav-right"
+        data-spin-right
+        aria-label="Spin right"
+      >
+        <span aria-hidden="true">&#8250;</span>
+      </button>
+
+      <canvas class="projects-canvas" data-projects-canvas aria-hidden="true" />
+
+      <div class="projects-fallback" data-projects-fallback>
+        {
+          projects.map((project, index) => (
+            <button
+              type="button"
+              class="projects-fallback-card"
+              data-fallback-card
+              data-project-index={index}
+            >
+              <span class="projects-chip">
+                {String(index + 1).padStart(2, "0")}
+              </span>
+              <h3>{project.name}</h3>
+              <p>{project.tagline}</p>
+            </button>
+          ))
+        }
+      </div>
+
+      <div class="projects-preview" data-project-preview aria-hidden="true">
+        <div class="projects-preview-media-wrap">
+          <video
+            class="projects-preview-video"
+            data-preview-video
+            muted
+            loop
+            playsinline
+            preload="none"
+          />
+        </div>
+
+        <div class="projects-preview-actions">
+          <button type="button" data-preview-close>
+            {section.backLabel}
+          </button>
+          <a
+            href="#"
+            data-preview-link
+            target="_blank"
+            rel="noreferrer noopener"
+          >
+            {section.detailsLabel}
+          </a>
+        </div>
+      </div>
+
+      <div class="projects-meta">
+        <div class="projects-meta-copy">
+          <h3 data-meta-name>{projects[0]?.name}</h3>
+          <p data-meta-services>{projects[0]?.services.join(". ")}</p>
+        </div>
+
+        <a class="projects-meta-link" href="/projects">
+          {section.allProjectsLabel}
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .projects-section {
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid
+      color-mix(in srgb, var(--color-border-subtle) 92%, transparent);
+    background:
+      radial-gradient(
+        120% 94% at 16% 12%,
+        color-mix(in srgb, var(--color-accent-tertiary) 24%, transparent),
+        transparent 54%
+      ),
+      radial-gradient(
+        120% 94% at 84% 8%,
+        color-mix(in srgb, var(--color-accent-emphasis) 28%, transparent),
+        transparent 52%
+      ),
+      linear-gradient(
+        180deg,
+        color-mix(in srgb, var(--color-bg-canvas) 34%, transparent),
+        color-mix(in srgb, var(--color-bg-surface) 88%, transparent)
+      );
+    padding: clamp(2.5rem, 5vw, 4rem) clamp(0.9rem, 4vw, 3rem);
+  }
+
+  .projects-shell {
+    position: relative;
+    overflow: hidden;
+    width: min(100%, 72rem);
+    margin: 0 auto;
+    min-height: clamp(20rem, 55vh, 32rem);
+  }
+
+  .projects-orbit-title {
+    margin: 0;
+    padding-top: clamp(0.6rem, 1.4vw, 1rem);
+    text-align: center;
+    font-size: var(--font-size-kicker);
+    letter-spacing: var(--letter-spacing-kicker);
+    text-transform: uppercase;
+    font-weight: 700;
+    color: color-mix(in srgb, var(--color-text-primary) 88%, transparent);
+  }
+
+  .projects-stage {
+    position: relative;
+    min-height: clamp(18rem, 50vh, 28rem);
+    margin-top: clamp(1.1rem, 2.4vw, 1.7rem);
+    border-radius: clamp(1rem, 2vw, 1.4rem);
+    border: 1px solid
+      color-mix(in srgb, var(--color-border-subtle) 86%, transparent);
+    background:
+      radial-gradient(
+        120% 90% at 50% 0%,
+        color-mix(in srgb, var(--color-accent-secondary) 16%, transparent),
+        transparent 62%
+      ),
+      linear-gradient(
+        160deg,
+        color-mix(in srgb, var(--color-bg-canvas) 28%, transparent),
+        color-mix(in srgb, var(--color-bg-surface) 72%, transparent)
+      );
+    box-shadow: 0 24px 54px rgba(5, 8, 26, 0.35);
+    overflow: hidden;
+    touch-action: pan-y;
+  }
+
+  .projects-stage::before {
+    content: "";
+    position: absolute;
+    left: -4%;
+    right: -4%;
+    top: 50.5%;
+    height: 1px;
+    background: color-mix(
+      in srgb,
+      var(--color-accent-secondary) 44%,
+      transparent
+    );
+    opacity: 0.65;
+    pointer-events: none;
+    z-index: 12;
+  }
+
+  .projects-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 8;
+    display: block;
+    filter: saturate(1.08) contrast(1.04);
+  }
+
+  .projects-nav {
+    position: absolute;
+    top: 50%;
+    z-index: 24;
+    width: 2.3rem;
+    height: 2.3rem;
+    display: grid;
+    place-items: center;
+    border-radius: var(--radius-pill);
+    border: 1px solid
+      color-mix(in srgb, var(--color-border-subtle) 90%, transparent);
+    background: color-mix(in srgb, var(--color-bg-canvas) 42%, transparent);
+    color: color-mix(in srgb, var(--color-text-secondary) 85%, transparent);
+    transform: translateY(-50%);
+    transition:
+      color var(--motion-duration-fast) var(--motion-ease-standard),
+      border-color var(--motion-duration-fast) var(--motion-ease-standard),
+      background-color var(--motion-duration-fast) var(--motion-ease-standard);
+  }
+
+  .projects-nav:hover {
+    color: var(--color-text-primary);
+    border-color: color-mix(
+      in srgb,
+      var(--color-accent-primary) 66%,
+      white 10%
+    );
+    background: color-mix(in srgb, var(--color-bg-elevated) 70%, transparent);
+  }
+
+  .projects-nav-left {
+    left: clamp(0.15rem, 1vw, 0.55rem);
+  }
+
+  .projects-nav-right {
+    right: clamp(0.15rem, 1vw, 0.55rem);
+  }
+
+  .projects-fallback {
+    position: relative;
+    z-index: 10;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+    gap: 0.9rem;
+    padding: 0.6rem;
+    margin-top: 0.8rem;
+  }
+
+  [data-enhanced="true"] .projects-fallback {
+    display: none;
+  }
+
+  [data-enhanced="false"] .projects-canvas,
+  [data-enhanced="false"] .projects-nav {
+    display: none;
+  }
+
+  .projects-fallback-card {
+    border: 1px solid
+      color-mix(in srgb, var(--color-border-subtle) 92%, transparent);
+    border-radius: clamp(0.8rem, 1.1vw, 1.1rem);
+    background: linear-gradient(
+      155deg,
+      color-mix(
+        in srgb,
+        var(--color-accent-primary) 28%,
+        var(--color-bg-elevated) 72%
+      ),
+      color-mix(
+        in srgb,
+        var(--color-accent-emphasis) 22%,
+        var(--color-bg-surface) 78%
+      )
+    );
+    color: var(--color-text-primary);
+    aspect-ratio: 10 / 14;
+    padding: 0.95rem;
+    display: grid;
+    align-content: start;
+    gap: 0.75rem;
+    text-align: left;
+  }
+
+  .projects-chip {
+    display: inline-flex;
+    width: fit-content;
+    border-radius: var(--radius-pill);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    padding: 0.26rem 0.56rem;
+    font-size: 0.64rem;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--color-text-primary) 82%, transparent);
+  }
+
+  .projects-fallback-card h3 {
+    margin: 0;
+    font-family: var(--font-family-display);
+    font-size: clamp(1rem, 1.4vw, 1.2rem);
+    line-height: 1.15;
+  }
+
+  .projects-fallback-card p {
+    margin: 0;
+    color: color-mix(in srgb, var(--color-text-primary) 80%, transparent);
+    font-size: 0.84rem;
+    line-height: 1.35;
+  }
+
+  .projects-preview {
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-modal);
+    display: grid;
+    align-content: center;
+    justify-items: center;
+    pointer-events: none;
+    opacity: 0;
+    visibility: hidden;
+    transform: scale(0.96);
+    background: color-mix(in srgb, var(--color-bg-canvas) 85%, transparent);
+    transition:
+      opacity 520ms var(--motion-ease-standard),
+      transform 560ms var(--motion-ease-expressive),
+      visibility 0s linear 560ms;
+  }
+
+  .projects-preview[data-open="true"] {
+    opacity: 1;
+    visibility: visible;
+    transform: scale(1);
+    pointer-events: auto;
+    transition:
+      opacity 520ms var(--motion-ease-standard),
+      transform 560ms var(--motion-ease-expressive),
+      visibility 0s;
+  }
+
+  .projects-preview-media-wrap {
+    width: min(86vw, 76rem);
+    max-width: calc(100% - 4rem);
+    aspect-ratio: 16 / 9;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background: var(--color-bg-canvas);
+    box-shadow: 0 28px 60px rgba(4, 6, 15, 0.5);
+    opacity: 0;
+    transform: scale(0.96);
+    transition:
+      opacity 560ms var(--motion-ease-expressive) 120ms,
+      transform 600ms var(--motion-ease-expressive) 120ms;
+  }
+
+  .projects-preview[data-open="true"] .projects-preview-media-wrap {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .projects-preview-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    background: var(--color-bg-canvas);
+  }
+
+  .projects-preview-actions {
+    margin-top: 1rem;
+    display: inline-flex;
+    gap: 0.75rem;
+    opacity: 0;
+    transform: translateY(0.5rem);
+    transition:
+      opacity 420ms var(--motion-ease-standard) 380ms,
+      transform 440ms var(--motion-ease-expressive) 380ms;
+  }
+
+  .projects-preview[data-open="true"] .projects-preview-actions {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .projects-preview-actions button,
+  .projects-preview-actions a {
+    cursor: pointer;
+    border-radius: var(--radius-pill);
+    min-width: 8rem;
+    padding: 0.58rem 1rem;
+    text-align: center;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: 0.73rem;
+    font-family: var(--font-family-body);
+    transition:
+      border-color var(--motion-duration-fast) var(--motion-ease-standard),
+      background-color var(--motion-duration-fast) var(--motion-ease-standard),
+      color var(--motion-duration-fast) var(--motion-ease-standard);
+  }
+
+  .projects-preview-actions button {
+    border: 1px solid
+      color-mix(in srgb, var(--color-border-subtle) 94%, transparent);
+    background: color-mix(in srgb, var(--color-bg-elevated) 92%, transparent);
+    color: var(--color-text-primary);
+  }
+
+  .projects-preview-actions button:hover {
+    border-color: color-mix(
+      in srgb,
+      var(--color-accent-primary) 66%,
+      transparent
+    );
+    background: color-mix(in srgb, var(--color-bg-elevated) 100%, transparent);
+  }
+
+  .projects-preview-actions a {
+    border: 1px solid transparent;
+    background: var(--gradient-impact);
+    color: white;
+  }
+
+  .projects-preview-actions a:hover {
+    opacity: 0.92;
+  }
+
+  .projects-meta {
+    position: absolute;
+    left: clamp(1rem, 2.6vw, 2.1rem);
+    right: clamp(1rem, 2.6vw, 2.1rem);
+    bottom: clamp(0.85rem, 2.1vw, 1.65rem);
+    z-index: 32;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+
+  .projects-meta-copy h3 {
+    margin: 0;
+    font-family: var(--font-family-display);
+    font-size: clamp(1.15rem, 1.8vw, 1.5rem);
+    line-height: 1.12;
+    color: var(--color-text-primary);
+  }
+
+  .projects-meta-copy p {
+    margin: 0.5rem 0 0;
+    color: color-mix(in srgb, var(--color-text-secondary) 78%, transparent);
+    font-size: 0.84rem;
+    line-height: 1.4;
+  }
+
+  .projects-meta-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-pill);
+    border: 1px solid
+      color-mix(in srgb, var(--color-border-subtle) 95%, transparent);
+    color: var(--color-text-primary);
+    text-decoration: none;
+    padding: 0.6rem 1.25rem;
+    font-size: 0.76rem;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    transition:
+      border-color var(--motion-duration-fast) var(--motion-ease-standard),
+      background-color var(--motion-duration-fast) var(--motion-ease-standard);
+  }
+
+  .projects-meta-link:hover {
+    border-color: color-mix(
+      in srgb,
+      var(--color-accent-tertiary) 58%,
+      white 8%
+    );
+    background: color-mix(in srgb, var(--color-bg-elevated) 55%, transparent);
+  }
+
+  @media (max-width: 44rem) {
+    .projects-nav {
+      width: 2rem;
+      height: 2rem;
+    }
+
+    .projects-fallback {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .projects-meta {
+      gap: 0.85rem;
+    }
+
+    .projects-meta-copy {
+      max-width: 100%;
+    }
+
+    .projects-preview-media-wrap {
+      max-width: calc(100% - 1.4rem);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .projects-preview,
+    .projects-preview-media-wrap,
+    .projects-preview-actions,
+    .projects-nav,
+    .projects-meta-link {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  import { initSection06Projects, getVideoSrc } from "../lib/section06-projects";
+
+  (() => {
+    const root = document.querySelector<HTMLElement>("[data-projects-root]");
+    if (!root) return;
+
+    const preview = root.querySelector<HTMLElement>("[data-project-preview]");
+    const previewVideo = root.querySelector<HTMLVideoElement>(
+      "[data-preview-video]",
+    );
+    const previewLink = root.querySelector<HTMLAnchorElement>(
+      "[data-preview-link]",
+    );
+    const previewClose = root.querySelector<HTMLButtonElement>(
+      "[data-preview-close]",
+    );
+    const fallbackCards = Array.from(
+      root.querySelectorAll<HTMLButtonElement>("[data-fallback-card]"),
+    );
+    const projectsEncoded = root.getAttribute("data-projects-json");
+
+    if (
+      !preview ||
+      !previewVideo ||
+      !previewLink ||
+      !previewClose ||
+      !projectsEncoded
+    ) {
+      return;
+    }
+
+    let projects: { id: string; name: string; tagline: string; services: string[]; videoSrc: string; projectUrl: string }[] = [];
+    try {
+      const parsed = JSON.parse(decodeURIComponent(projectsEncoded)) as unknown;
+      if (Array.isArray(parsed)) {
+        projects = parsed as typeof projects;
+      }
+    } catch {
+      projects = [];
+    }
+
+    if (projects.length === 0) return;
+
+    const previewOriginalParent = preview.parentElement;
+
+    const setPreviewOpen = (value: boolean) => {
+      root.setAttribute("data-preview-open", value ? "true" : "false");
+      preview.setAttribute("aria-hidden", value ? "false" : "true");
+      preview.setAttribute("data-open", value ? "true" : "false");
+      if (value) {
+        document.body.appendChild(preview);
+      } else if (previewOriginalParent) {
+        previewOriginalParent.appendChild(preview);
+      }
+    };
+
+    const refreshMeta = (index: number) => {
+      const project = projects[index];
+      if (!project) return;
+      const metaName = root.querySelector<HTMLElement>("[data-meta-name]");
+      const metaServices = root.querySelector<HTMLElement>(
+        "[data-meta-services]",
+      );
+      if (metaName) metaName.textContent = project.name;
+      if (metaServices) metaServices.textContent = project.services.join(". ");
+    };
+
+    const onOpenPreview = (index: number) => {
+      const project = projects[index];
+      if (!project) return;
+      setPreviewOpen(true);
+      previewLink.setAttribute("href", project.projectUrl);
+      previewVideo.setAttribute("src", getVideoSrc(project, index));
+      previewVideo.load();
+      previewVideo.play().catch(() => {});
+    };
+
+    const onClosePreview = () => {
+      setPreviewOpen(false);
+      previewVideo.pause();
+      previewVideo.currentTime = 0;
+      previewVideo.removeAttribute("src");
+      previewLink.setAttribute("href", "#");
+    };
+
+    fallbackCards.forEach((card) => {
+      const rawIndex = Number(card.getAttribute("data-project-index"));
+      if (Number.isFinite(rawIndex)) {
+        card.addEventListener("click", () => {
+          refreshMeta(rawIndex);
+          onOpenPreview(rawIndex);
+        });
+      }
+    });
+
+    previewClose.addEventListener("click", () => {
+      root.dispatchEvent(new CustomEvent("section06-close-preview"));
+      onClosePreview();
+    });
+
+    previewLink.addEventListener("click", () => {
+      previewVideo.pause();
+    });
+
+    initSection06Projects({
+      root,
+      projects,
+      onRefreshMeta: refreshMeta,
+      onOpenPreview,
+      onClosePreview,
+    });
+  })();
+</script>

@@ -1,0 +1,41 @@
+---
+import {
+  type Locale,
+  getSupportedLocales,
+  switchLocalePath,
+} from "../../lib/i18n";
+
+interface Props {
+  currentLocale: Locale;
+  pathname?: string;
+}
+
+const { currentLocale, pathname = "/" } = Astro.props;
+const links = getSupportedLocales().map((locale) => ({
+  locale,
+  href: switchLocalePath(pathname, locale),
+  active: locale === currentLocale,
+}));
+---
+
+<nav aria-label="Locale switcher">
+  <ul class="flex items-center gap-2">
+    {
+      links.map((link) => (
+        <li>
+          <a
+            href={link.href}
+            class={`inline-flex min-w-11 justify-center rounded-full border px-3 py-1.5 text-xs font-semibold uppercase tracking-wide transition-colors ${
+              link.active
+                ? "border-white/30 bg-white/15 text-white"
+                : "border-white/20 bg-white/5 text-slate-300 hover:border-white/35 hover:text-white"
+            }`}
+            aria-current={link.active ? "page" : undefined}
+          >
+            {link.locale}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</nav>

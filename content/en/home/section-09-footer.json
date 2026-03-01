@@ -1,0 +1,27 @@
+{
+  "key": "section09",
+  "anchorId": "footer",
+  "kicker": "Section 09",
+  "heading": "Footer",
+  "summary": "Closing marquee, central CTA, rolling icon, and domino finale.",
+  "marqueeText": "ON SE LANCE ?",
+  "ctaLabel": "Pitch us your idea",
+  "ctaHref": "#footer-form",
+  "email": "info@exitmediagroup.com",
+  "formLabels": {
+    "nameLabel": "Name",
+    "emailLabel": "Email",
+    "messageLabel": "Message",
+    "submitLabel": "SEND"
+  },
+  "navLinks": [
+    { "label": "Legal", "href": "/legal" },
+    { "label": "Privacy", "href": "/privacy" }
+  ],
+  "copyright": "© 2026 Exit Media Group. All rights reserved.",
+  "socialLinks": [
+    { "label": "Instagram", "href": "https://instagram.com/exitmediagroup" },
+    { "label": "LinkedIn", "href": "https://linkedin.com/company/exitmediagroup" },
+    { "label": "Vimeo", "href": "https://vimeo.com/exitmediagroup" }
+  ]
+}

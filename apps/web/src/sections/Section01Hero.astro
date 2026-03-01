@@ -1,0 +1,643 @@
+---
+import type { HomeSectionByKey } from "../lib/content-types";
+
+interface Props {
+  section: HomeSectionByKey<"section01">;
+}
+
+const { section } = Astro.props;
+const leftDomino = section.dominos.find((domino) => domino.role === "left");
+const centerDomino = section.dominos.find((domino) => domino.role === "center");
+const rightDomino = section.dominos.find((domino) => domino.role === "right");
+---
+
+<section
+  id={section.anchorId}
+  data-hero-root
+  class="hero-root border-b border-white/10"
+  style="--hero-frame-width: 16px; --hero-frame-height: 184px;"
+>
+  <div class="hero-stage">
+    <div class="hero-smoke-layer">
+      <video
+        transition:name="hero-smoke"
+        transition:persist
+        src={section.smokeVideo.src}
+        poster={section.smokeVideo.poster}
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="auto"></video>
+    </div>
+
+    <div class="hero-overlay" aria-hidden="true"></div>
+
+    <div class="hero-content">
+      <h1 class="hero-title">
+        <span class="hero-title-line hero-title-primary">
+          {section.heroTitlePrimary}
+        </span>
+        <span class="hero-title-line hero-title-secondary">
+          {section.heroTitleSecondary}
+        </span>
+      </h1>
+    </div>
+
+    <div class="hero-domino-wrap" aria-hidden="true">
+      <div
+        class="hero-domino hero-domino-left"
+        data-domino-id={leftDomino?.id ?? "domino-left"}
+      >
+      </div>
+      <div
+        class="hero-domino hero-domino-center"
+        data-domino-id={centerDomino?.id ?? "domino-center"}
+      >
+        <video
+          class="hero-showreel"
+          transition:name="hero-showreel"
+          transition:persist
+          src={section.showreelVideo.src}
+          poster={section.showreelVideo.poster}
+          autoplay
+          muted
+          loop
+          playsinline
+          preload="metadata"></video>
+      </div>
+      <div
+        class="hero-domino hero-domino-right"
+        data-domino-id={rightDomino?.id ?? "domino-right"}
+      >
+      </div>
+    </div>
+
+    <div class="hero-arrow-wrap">
+      <span>{section.scrollCueLabel}</span>
+      <div class="hero-arrow"></div>
+    </div>
+
+    <p class="hero-reveal-line" aria-label={section.introLine}>
+      {
+        section.revealWords.map((word, index) => (
+          <>
+            <span class="hero-reveal-word" data-word-index={index}>
+              {word}
+            </span>
+            {index < section.revealWords.length - 1 ? " " : ""}
+          </>
+        ))
+      }
+    </p>
+  </div>
+</section>
+
+<style>
+  .hero-root {
+    --hero-progress: 0;
+    --hero-intro: 0;
+    --hero-morph: 0;
+    --hero-settle: 0;
+    --hero-showreel-opacity: 0;
+    --hero-title-split: 0;
+    --hero-title-scale: 1;
+    --hero-title-opacity: 1;
+    --hero-card-tilt: 0;
+    --hero-card-shift: 0px;
+    --hero-reveal: 0;
+    --hero-arrow-opacity: 1;
+    position: relative;
+    min-height: 244svh;
+    isolation: isolate;
+  }
+
+  .hero-stage {
+    position: sticky;
+    top: 0;
+    height: 100svh;
+    overflow: hidden;
+    background: #060a18;
+  }
+
+  .hero-smoke-layer {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+
+  .hero-smoke-layer video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: calc(1 - (var(--hero-morph) * 0.86));
+    filter: brightness(calc(0.5 + (var(--hero-intro) * 0.52)))
+      saturate(calc(0.72 + (var(--hero-intro) * 0.56)));
+    transform: scale(calc(1 + (var(--hero-intro) * 0.06)));
+    transform-origin: center;
+    transition: opacity 140ms linear;
+  }
+
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(
+      180deg,
+      rgba(6, 8, 20, 0.22) 0%,
+      rgba(6, 8, 20, 0.14) 44%,
+      rgba(6, 8, 20, 0.7) 100%
+    );
+    pointer-events: none;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 4;
+    margin: 0 auto;
+    width: min(92vw, 1120px);
+    padding-top: clamp(6.2rem, 11vh, 8.8rem);
+    text-align: center;
+    pointer-events: none;
+  }
+
+  .hero-title {
+    margin: 0;
+    font-family: var(--font-family-display);
+    font-size: clamp(2.05rem, 7.45vw, 6rem);
+    font-weight: 720;
+    line-height: 0.94;
+    letter-spacing: -0.015em;
+    opacity: var(--hero-title-opacity);
+    transform: scale(var(--hero-title-scale));
+    transform-origin: center;
+    will-change: transform, opacity;
+  }
+
+  .hero-title-line {
+    display: block;
+    transition: transform 80ms linear;
+  }
+
+  .hero-title-primary {
+    color: var(--color-text-primary);
+    transform: translate3d(
+      calc(var(--hero-title-split) * -19vw),
+      calc(var(--hero-title-split) * -0.8vh),
+      0
+    );
+  }
+
+  .hero-title-secondary {
+    margin-top: 0.06em;
+    color: color-mix(in srgb, var(--color-text-primary) 40%, transparent);
+    transform: translate3d(
+      calc(var(--hero-title-split) * 18vw),
+      calc(var(--hero-title-split) * 0.5vh),
+      0
+    );
+  }
+
+  .hero-domino-wrap {
+    position: absolute;
+    left: 50%;
+    bottom: clamp(6.2rem, 16vh, 11.2rem);
+    z-index: 5;
+    display: flex;
+    gap: clamp(1.1rem, 2.6vw, 2.25rem);
+    align-items: flex-end;
+    transform: translateX(-50%);
+    pointer-events: none;
+  }
+
+  .hero-domino {
+    border-radius: clamp(0.6rem, 1.4vw, 1.15rem);
+    border: 1px solid rgba(255, 255, 255, 0.54);
+    background: color-mix(
+      in srgb,
+      var(--color-accent-primary) 18%,
+      transparent
+    );
+    box-shadow:
+      0 18px 44px rgba(4, 5, 19, 0.44),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  }
+
+  .hero-domino-left,
+  .hero-domino-right {
+    width: 16px;
+    height: 198px;
+    opacity: calc(0.95 - (var(--hero-morph) * 0.45));
+  }
+
+  .hero-domino-left {
+    transform: translate3d(0, calc(var(--hero-intro) * -26px), 0)
+      rotateZ(calc(var(--hero-morph) * -8deg));
+  }
+
+  .hero-domino-right {
+    transform: translate3d(0, calc(var(--hero-intro) * -20px), 0)
+      rotateZ(calc(var(--hero-morph) * 7deg));
+  }
+
+  .hero-domino-center {
+    position: relative;
+    width: var(--hero-frame-width);
+    height: var(--hero-frame-height);
+    overflow: hidden;
+    border-color: color-mix(in srgb, white 84%, var(--color-accent-primary));
+    border-radius: clamp(
+      var(--radius-md),
+      calc(var(--radius-md) + ((1 - var(--hero-morph)) * 0.96rem)),
+      var(--radius-xl)
+    );
+    transform: translate3d(0, var(--hero-card-shift), 0)
+      rotateZ(calc(var(--hero-card-tilt) * 1deg));
+    transform-origin: center;
+  }
+
+  .hero-showreel {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: var(--hero-showreel-opacity);
+    filter: saturate(calc(0.86 + (var(--hero-showreel-opacity) * 0.3)));
+  }
+
+  .hero-arrow-wrap {
+    position: absolute;
+    left: 50%;
+    bottom: 1.6rem;
+    z-index: 6;
+    display: grid;
+    place-items: center;
+    gap: 0.5rem;
+    transform: translateX(-50%);
+    opacity: var(--hero-arrow-opacity);
+  }
+
+  .hero-arrow-wrap span {
+    font-size: 0.7rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(237, 241, 255, 0.7);
+  }
+
+  .hero-arrow {
+    position: relative;
+    width: 1px;
+    height: 52px;
+    border-radius: var(--radius-pill);
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.72) 0%,
+      rgba(255, 255, 255, 0.08) 100%
+    );
+    overflow: hidden;
+  }
+
+  .hero-arrow::before {
+    content: "";
+    position: absolute;
+    left: -4px;
+    top: -16px;
+    width: 9px;
+    height: 9px;
+    border-right: 1px solid rgba(255, 255, 255, 0.86);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.86);
+    transform: rotate(45deg);
+    animation: hero-arrow-flow 1.8s var(--motion-ease-expressive) infinite;
+  }
+
+  .hero-reveal-line {
+    position: absolute;
+    left: 50%;
+    bottom: clamp(1.7rem, 5.2vh, 3.4rem);
+    z-index: 6;
+    width: min(92vw, 1060px);
+    margin: 0;
+    text-align: left;
+    transform: translateX(-50%);
+    font-family: var(--font-family-display);
+    font-size: clamp(1.05rem, 2.58vw, 3rem);
+    font-weight: 620;
+    line-height: 1.06;
+    letter-spacing: -0.012em;
+    opacity: calc(var(--hero-reveal) * 1.02);
+    pointer-events: none;
+  }
+
+  .hero-reveal-word {
+    opacity: 0.24;
+    color: rgba(245, 248, 255, 0.98);
+    transition: opacity var(--motion-duration-fast) linear;
+  }
+
+  .hero-root[data-reduced-motion="true"] {
+    min-height: auto;
+  }
+
+  .hero-root[data-reduced-motion="true"] .hero-stage {
+    position: relative;
+    min-height: 100svh;
+  }
+
+  .hero-root[data-reduced-motion="true"] .hero-smoke-layer video {
+    opacity: 0.25;
+    filter: brightness(0.6) saturate(1.15);
+    transform: none;
+  }
+
+  .hero-root[data-reduced-motion="true"] .hero-title {
+    opacity: 1;
+    transform: none;
+  }
+
+  .hero-root[data-reduced-motion="true"] .hero-title-line {
+    transform: none;
+  }
+
+  .hero-root[data-reduced-motion="true"] .hero-domino-left,
+  .hero-root[data-reduced-motion="true"] .hero-domino-right {
+    display: none;
+  }
+
+  .hero-root[data-reduced-motion="true"] .hero-domino-center {
+    width: min(92vw, 1120px);
+    height: min(51.75vw, 580px);
+    transform: none;
+  }
+
+  .hero-root[data-reduced-motion="true"] .hero-showreel {
+    opacity: 1;
+    filter: none;
+  }
+
+  .hero-root[data-reduced-motion="true"] .hero-arrow-wrap {
+    display: none;
+  }
+
+  .hero-root[data-reduced-motion="true"] .hero-reveal-line {
+    opacity: 1;
+  }
+
+  .hero-root[data-reduced-motion="true"] .hero-reveal-word {
+    opacity: 1;
+  }
+
+  @keyframes hero-arrow-flow {
+    0% {
+      opacity: 0;
+      transform: translateY(0) rotate(45deg);
+    }
+    30% {
+      opacity: 1;
+    }
+    72% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(56px) rotate(45deg);
+    }
+  }
+
+  @media (max-width: 64rem) {
+    .hero-domino-wrap {
+      bottom: clamp(6.6rem, 16vh, 10rem);
+    }
+
+    .hero-reveal-line {
+      width: min(92vw, 920px);
+      font-size: clamp(1.02rem, 2.9vw, 2.5rem);
+      line-height: 1.1;
+    }
+  }
+
+  @media (max-width: 48rem) {
+    .hero-root {
+      min-height: 214svh;
+    }
+
+    .hero-content {
+      padding-top: clamp(5.7rem, 10.2vh, 7.3rem);
+    }
+
+    .hero-title {
+      font-size: clamp(2.04rem, 12.4vw, 4rem);
+      line-height: 0.96;
+    }
+
+    .hero-title-primary {
+      transform: translate3d(
+        calc(var(--hero-title-split) * -28vw),
+        calc(var(--hero-title-split) * -0.8vh),
+        0
+      );
+    }
+
+    .hero-title-secondary {
+      transform: translate3d(
+        calc(var(--hero-title-split) * 28vw),
+        calc(var(--hero-title-split) * 0.6vh),
+        0
+      );
+    }
+
+    .hero-domino-wrap {
+      gap: 0.9rem;
+      bottom: clamp(6.7rem, 17vh, 9rem);
+    }
+
+    .hero-domino-left,
+    .hero-domino-right {
+      width: 11px;
+      height: 136px;
+    }
+
+    .hero-arrow-wrap span {
+      font-size: 0.61rem;
+      letter-spacing: 0.14em;
+    }
+
+    .hero-reveal-line {
+      bottom: clamp(1.2rem, 4.6vh, 2.2rem);
+      font-size: clamp(1rem, 7.2vw, 1.8rem);
+      line-height: 1.09;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-root {
+      min-height: auto;
+    }
+
+    .hero-stage {
+      position: relative;
+    }
+
+    .hero-arrow::before {
+      animation: none;
+      opacity: 1;
+      transform: translateY(42px) rotate(45deg);
+    }
+  }
+</style>
+
+<script>
+  let heroTeardown: (() => void) | null = null;
+
+  const setupHeroScroll = () => {
+    if (heroTeardown) {
+      heroTeardown();
+      heroTeardown = null;
+    }
+
+    const root = document.querySelector<HTMLElement>("[data-hero-root]");
+    if (!root) return;
+
+    const wordNodes = Array.from(root.querySelectorAll(".hero-reveal-word"));
+    const motionPreference = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    );
+
+    const clamp = (value: number, min: number, max: number) =>
+      Math.min(max, Math.max(min, value));
+    const lerp = (start: number, end: number, amount: number) =>
+      start + (end - start) * amount;
+    const easeOutCubic = (value: number) =>
+      1 - Math.pow(1 - clamp(value, 0, 1), 3);
+
+    let targetProgress = 0;
+    let currentProgress = 0;
+    let frameRequested = false;
+
+    const applyReducedMotion = () => {
+      root.setAttribute("data-reduced-motion", "true");
+      root.style.setProperty("--hero-progress", "1");
+      root.style.setProperty("--hero-intro", "1");
+      root.style.setProperty("--hero-morph", "1");
+      root.style.setProperty("--hero-settle", "1");
+      root.style.setProperty("--hero-title-split", "0");
+      root.style.setProperty("--hero-title-scale", "1");
+      root.style.setProperty("--hero-title-opacity", "1");
+      root.style.setProperty("--hero-showreel-opacity", "1");
+      root.style.setProperty("--hero-card-tilt", "0");
+      root.style.setProperty("--hero-card-shift", "0px");
+      root.style.setProperty("--hero-reveal", "1");
+      root.style.setProperty("--hero-arrow-opacity", "0");
+      wordNodes.forEach((node) => {
+        (node as HTMLElement).style.opacity = "1";
+      });
+    };
+
+    const applyProgress = (progress: number) => {
+      const intro = easeOutCubic(progress / 0.24);
+      const titleSplit = clamp((progress - 0.16) / 0.22, 0, 1);
+      const titleScale = lerp(1, 2.4, easeOutCubic(titleSplit));
+      const titleOpacity = 1 - easeOutCubic((progress - 0.18) / 0.23);
+      const morph = easeOutCubic((progress - 0.28) / 0.42);
+      const settle = easeOutCubic((progress - 0.64) / 0.2);
+      const showreelOpacity = easeOutCubic((progress - 0.5) / 0.26);
+      const reveal = easeOutCubic((progress - 0.66) / 0.28);
+      const arrowOpacity = 1 - easeOutCubic((progress - 0.06) / 0.2);
+
+      const targetWidth = Math.min(window.innerWidth * 0.94, 1260);
+      const targetHeight = Math.min(window.innerHeight * 0.5, 560);
+      const frameWidth = lerp(16, targetWidth, morph);
+      const frameHeight = lerp(184, targetHeight, morph);
+
+      const tiltIn = lerp(0, -18, morph);
+      const cardTilt = lerp(tiltIn, 0, settle);
+      const cardShift = lerp(
+        0,
+        -Math.min(window.innerHeight * 0.22, 160),
+        morph,
+      );
+
+      root.style.setProperty("--hero-progress", progress.toFixed(4));
+      root.style.setProperty("--hero-intro", intro.toFixed(4));
+      root.style.setProperty("--hero-morph", morph.toFixed(4));
+      root.style.setProperty("--hero-settle", settle.toFixed(4));
+      root.style.setProperty("--hero-title-split", titleSplit.toFixed(4));
+      root.style.setProperty("--hero-title-scale", titleScale.toFixed(4));
+      root.style.setProperty("--hero-title-opacity", titleOpacity.toFixed(4));
+      root.style.setProperty(
+        "--hero-showreel-opacity",
+        showreelOpacity.toFixed(4),
+      );
+      root.style.setProperty("--hero-card-tilt", cardTilt.toFixed(4));
+      root.style.setProperty("--hero-card-shift", `${cardShift.toFixed(2)}px`);
+      root.style.setProperty("--hero-reveal", reveal.toFixed(4));
+      root.style.setProperty("--hero-arrow-opacity", arrowOpacity.toFixed(4));
+      root.style.setProperty(
+        "--hero-frame-width",
+        `${frameWidth.toFixed(2)}px`,
+      );
+      root.style.setProperty(
+        "--hero-frame-height",
+        `${frameHeight.toFixed(2)}px`,
+      );
+
+      const count = Math.max(wordNodes.length - 1, 1);
+      wordNodes.forEach((node, index) => {
+        const wordStart = (index / count) * 0.84;
+        const wordEnd = wordStart + 0.24;
+        const blend = clamp((reveal - wordStart) / (wordEnd - wordStart), 0, 1);
+        (node as HTMLElement).style.opacity = (0.24 + blend * 0.76).toFixed(3);
+      });
+    };
+
+    const step = () => {
+      frameRequested = false;
+      currentProgress = lerp(currentProgress, targetProgress, 0.16);
+      if (Math.abs(currentProgress - targetProgress) <= 0.0008) {
+        currentProgress = targetProgress;
+      }
+      applyProgress(currentProgress);
+      if (currentProgress !== targetProgress) {
+        requestTick();
+      }
+    };
+
+    const requestTick = () => {
+      if (frameRequested) return;
+      frameRequested = true;
+      window.requestAnimationFrame(step);
+    };
+
+    const updateTargetProgress = () => {
+      if (motionPreference.matches) {
+        applyReducedMotion();
+        return;
+      }
+
+      root.removeAttribute("data-reduced-motion");
+      const start = (root as HTMLElement).offsetTop;
+      const distance = Math.max(
+        (root as HTMLElement).offsetHeight - window.innerHeight,
+        1,
+      );
+      const scrolled = window.scrollY - start;
+      targetProgress = clamp(scrolled / distance, 0, 1);
+      requestTick();
+    };
+
+    window.addEventListener("scroll", updateTargetProgress, { passive: true });
+    window.addEventListener("resize", updateTargetProgress);
+
+    motionPreference.addEventListener("change", updateTargetProgress);
+
+    updateTargetProgress();
+
+    heroTeardown = () => {
+      window.removeEventListener("scroll", updateTargetProgress);
+      window.removeEventListener("resize", updateTargetProgress);
+      motionPreference.removeEventListener("change", updateTargetProgress);
+    };
+  };
+
+  document.addEventListener("astro:page-load", setupHeroScroll);
+</script>

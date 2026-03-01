@@ -1,0 +1,270 @@
+---
+import type { HomeSectionByKey } from "../lib/content-types";
+
+interface Props {
+  section: HomeSectionByKey<"section04">;
+}
+
+const { section } = Astro.props;
+---
+
+<section id={section.anchorId} data-section={section.key} class="method-section">
+  <div class="method-wrap" data-method-root data-promise-visible="false">
+    <p class="method-kicker">{section.kicker}</p>
+
+    <h2 class="method-statement" aria-label={section.heading}>
+      {
+        section.statementWords.map((word) => (
+          <span class="method-word">
+            {word}
+            .
+          </span>
+        ))
+      }
+    </h2>
+
+    <div class="method-dominos" aria-hidden="true">
+      <span class="method-domino method-domino-1" data-method-domino>
+        <span class="method-domino-fill"></span>
+      </span>
+      <span class="method-domino method-domino-2" data-method-domino>
+        <span class="method-domino-fill"></span>
+      </span>
+      <span class="method-domino method-domino-3" data-method-domino>
+        <span class="method-domino-fill"></span>
+      </span>
+    </div>
+
+    <p class="method-promise" data-method-promise>
+      {section.promise}
+    </p>
+  </div>
+</section>
+
+<style>
+  .method-section {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(4.25rem, 9vw, 7rem) clamp(1.1rem, 4vw, 3rem)
+      clamp(2.5rem, 7vw, 4.5rem);
+    box-sizing: border-box;
+    background:
+      radial-gradient(90% 100% at 12% 8%, rgba(240, 90, 42, 0.18) 0%, transparent 62%),
+      radial-gradient(70% 70% at 85% 11%, rgba(106, 44, 255, 0.2) 0%, transparent 60%),
+      #1a0a45;
+    color: #f7f3ff;
+  }
+
+  .method-wrap {
+    width: min(100%, 74rem);
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .method-kicker {
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: clamp(0.7rem, 0.62rem + 0.22vw, 0.88rem);
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.88);
+  }
+
+  .method-statement {
+    margin: clamp(2rem, 4vw, 3.2rem) auto 0;
+    max-width: 36ch;
+    font-family: var(--font-family-display);
+    font-size: clamp(2rem, 1.2rem + 4vw, 5.4rem);
+    font-style: italic;
+    font-weight: 680;
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+    background: linear-gradient(95deg, #ffb13b 0%, #cf6bd3 48%, #6a2cff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .method-word {
+    display: inline;
+    white-space: nowrap;
+  }
+
+  .method-word + .method-word {
+    margin-left: 0.25ch;
+  }
+
+  .method-promise {
+    margin: clamp(2rem, 4vw, 3rem) auto 0;
+    max-width: 62ch;
+    font-size: clamp(1.04rem, 0.96rem + 0.34vw, 1.34rem);
+    line-height: 1.27;
+    font-weight: 700;
+    color: #ffffff;
+    text-wrap: balance;
+    text-shadow: 0 2px 14px rgba(11, 8, 29, 0.35);
+    opacity: 0;
+    transform: translateY(0.9rem);
+    transition:
+      opacity 320ms var(--motion-ease-standard),
+      transform 320ms var(--motion-ease-standard);
+  }
+
+  .method-wrap[data-promise-visible="true"] .method-promise {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .method-dominos {
+    margin: clamp(2.4rem, 4.5vw, 3.5rem) auto 0;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: end;
+    justify-items: center;
+    gap: clamp(2rem, 9vw, 8rem);
+    width: min(100%, 41rem);
+    min-height: clamp(9.5rem, 18vw, 12.5rem);
+  }
+
+  .method-domino {
+    position: relative;
+    width: clamp(1.25rem, 0.95rem + 1vw, 1.9rem);
+    border-radius: 999px;
+    overflow: hidden;
+    opacity: 0.28;
+    transition: opacity 200ms linear;
+  }
+
+  .method-domino-1 {
+    height: clamp(9.8rem, 18vw, 11.8rem);
+    background: rgba(141, 90, 56, 0.52);
+  }
+
+  .method-domino-2 {
+    height: clamp(7.3rem, 13vw, 9.3rem);
+    background: rgba(116, 73, 164, 0.52);
+  }
+
+  .method-domino-3 {
+    height: clamp(9.8rem, 18vw, 11.8rem);
+    background: rgba(62, 30, 146, 0.66);
+  }
+
+  .method-domino-fill {
+    position: absolute;
+    inset: 0 0 0;
+    transform-origin: bottom;
+    transform: scaleY(var(--fill-progress, 0));
+    transition: transform 120ms linear;
+  }
+
+  .method-domino-1 .method-domino-fill {
+    background: #ffb13b;
+  }
+
+  .method-domino-2 .method-domino-fill {
+    background: #b168d5;
+  }
+
+  .method-domino-3 .method-domino-fill {
+    background: #6a2cff;
+  }
+
+  @media (max-width: 42rem) {
+    .method-statement {
+      max-width: 24ch;
+    }
+
+    .method-word {
+      display: block;
+    }
+
+    .method-word + .method-word {
+      margin-left: 0;
+    }
+
+    .method-dominos {
+      gap: clamp(1.4rem, 6vw, 3rem);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .method-promise,
+    .method-domino,
+    .method-domino-fill {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  import { initMethodScrollLock } from "../lib/section04-method/scroll-lock";
+
+  let methodTeardown: (() => void) | null = null;
+
+  const setupMethodSection = () => {
+    if (methodTeardown) {
+      methodTeardown();
+      methodTeardown = null;
+    }
+
+    const section = document.querySelector(".method-section");
+    const root = document.querySelector("[data-method-root]");
+    if (!section || !root) return;
+
+    const dominos = Array.from(root.querySelectorAll("[data-method-domino]"));
+    const fills = dominos.map((d) => d.querySelector(".method-domino-fill"));
+    if (!dominos.length || fills.some((f) => !f)) return;
+
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+
+    if (prefersReducedMotion) {
+      fills.forEach((fill) =>
+        (fill as HTMLElement).style.setProperty("--fill-progress", "1"),
+      );
+      dominos.forEach((d) => ((d as HTMLElement).style.opacity = "1"));
+      root.setAttribute("data-promise-visible", "true");
+      return;
+    }
+
+    const clamp = (v: number, min: number, max: number) =>
+      Math.min(max, Math.max(min, v));
+
+    const applyProgress = (progress: number) => {
+      const segment = 1 / 3;
+      dominos.forEach((domino, i) => {
+        (domino as HTMLElement).style.opacity = (0.28 + progress * 0.72).toFixed(
+          3,
+        );
+      });
+      fills.forEach((fill, index) => {
+        if (!fill) return;
+        const start = index * segment;
+        const fillProgress = clamp((progress - start) / segment, 0, 1);
+        (fill as HTMLElement).style.setProperty(
+          "--fill-progress",
+          fillProgress.toFixed(3),
+        );
+      });
+      const allFilled = progress >= 0.999;
+      root.setAttribute("data-promise-visible", String(allFilled));
+    };
+
+    methodTeardown = initMethodScrollLock({
+      root: section as HTMLElement,
+      onProgress: applyProgress,
+      onComplete: () => {
+        applyProgress(1);
+      },
+    });
+  };
+
+  document.addEventListener("astro:page-load", setupMethodSection);
+</script>

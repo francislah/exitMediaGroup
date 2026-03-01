@@ -1,0 +1,45 @@
+{
+  "key": "section07",
+  "anchorId": "testimonials",
+  "kicker": "DES RETOURS, SANS DÉTOURS.",
+  "heading": "Testimonials",
+  "summary": "Des témoignages clients qui parlent d'eux-mêmes.",
+  "testimonials": [
+    {
+      "quote": "Ils ont su structurer nos idées et leur donner une direction claire. Le processus était fluide, maîtrisé, et le résultat s'est imposé naturellement.",
+      "author": "Marie Gagnon",
+      "role": "Directrice marketing",
+      "company": "Groupe Média Horizon"
+    },
+    {
+      "quote": "Une collaboration incroyable et une livraison plus rapide que jamais.",
+      "author": "Marc Dubois",
+      "role": "Chef de Marque",
+      "company": "Refuge des Jeunes de Montréal"
+    },
+    {
+      "quote": "Ils ont transformé notre vision en une expérience visuelle saisissante.",
+      "author": "Sophie Lefèvre",
+      "role": "Directrice Créative",
+      "company": "Nexus Conférence"
+    },
+    {
+      "quote": "Professionnalisme, écoute et résultats au-delà de nos attentes.",
+      "author": "Antoine Moreau",
+      "role": "Fondateur",
+      "company": "Horizon Tech"
+    },
+    {
+      "quote": "Une équipe qui comprend l'urgence sans jamais sacrifier la qualité.",
+      "author": "Camille Rousseau",
+      "role": "Responsable Communication",
+      "company": "Métropole Culture"
+    },
+    {
+      "quote": "Des stratèges créatifs qui savent raconter des histoires qui marquent.",
+      "author": "Marie-Claire Fournier",
+      "role": "Directrice Marketing",
+      "company": "Fondation des Jeunes de Montréal"
+    }
+  ]
+}

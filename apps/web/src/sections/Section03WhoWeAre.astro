@@ -1,0 +1,307 @@
+---
+import type { HomeSectionByKey } from "../lib/content-types";
+
+interface Props {
+  section: HomeSectionByKey<"section03">;
+}
+
+const { section } = Astro.props;
+---
+
+<section
+  id={section.anchorId}
+  data-section={section.key}
+  class="who-section border-b border-black/10"
+  data-who-root
+>
+  <div class="who-wrap">
+    <article class="who-copy" data-who-copy>
+      <p class="who-kicker">{section.kicker}</p>
+      <h2 class="who-title">{section.heading}</h2>
+      <p class="who-paragraph">{section.summary}</p>
+      <p class="who-paragraph">{section.body}</p>
+      <a class="who-cta" href={section.ctaHref}>{section.ctaLabel}</a>
+    </article>
+
+    <div class="who-media" data-who-media>
+      <video
+        data-who-video
+        src={section.video.src}
+        poster={section.video.poster}
+        muted={section.video.muted}
+        loop={section.video.loop}
+        autoplay={section.video.autoplay}
+        playsinline
+        preload="metadata"
+        aria-label={`${section.heading} video`}
+      ></video>
+      <button
+        type="button"
+        class="who-play"
+        data-who-play
+        aria-label={section.video.playLabel}
+      >
+        <svg viewBox="0 0 32 32" role="presentation" aria-hidden="true">
+          <path d="M11 8.5L24 16L11 23.5V8.5Z"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+</section>
+
+<style>
+  .who-section {
+    background: #ececed;
+    color: #161320;
+    padding: clamp(3.6rem, 7vw, 6.2rem) clamp(1.2rem, 4vw, 4rem);
+  }
+
+  .who-wrap {
+    --who-copy-shift: 0px;
+    width: min(100%, 71rem);
+    margin: 0 auto;
+    display: grid;
+    gap: clamp(1.8rem, 4vw, 3.6rem);
+    align-items: center;
+    opacity: 0;
+    transition: opacity var(--motion-duration-slow) var(--motion-ease-standard);
+  }
+
+  .who-copy {
+    max-width: 33rem;
+    transform: translate3d(0, calc(14px + var(--who-copy-shift)), 0);
+    transition:
+      transform var(--motion-duration-slow) var(--motion-ease-expressive),
+      opacity var(--motion-duration-slow) var(--motion-ease-standard);
+  }
+
+  .who-kicker {
+    margin: 0;
+    font-size: clamp(0.7rem, 0.67rem + 0.18vw, 0.82rem);
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: #7b3bd6;
+    font-weight: 600;
+  }
+
+  .who-title {
+    margin: clamp(1.4rem, 2.4vw, 2rem) 0 clamp(1.4rem, 2.3vw, 1.9rem);
+    max-width: 14ch;
+    font-family: var(--font-family-display);
+    font-style: italic;
+    font-size: clamp(2rem, 1.16rem + 2.2vw, 3.45rem);
+    font-weight: 650;
+    line-height: 1.03;
+    color: #4d2fc8;
+  }
+
+  .who-paragraph {
+    margin: 0 0 0.85rem;
+    max-width: 34ch;
+    color: #232032;
+    font-size: clamp(1.02rem, 0.96rem + 0.3vw, 1.16rem);
+    line-height: 1.32;
+  }
+
+  .who-paragraph:last-of-type {
+    margin-bottom: 1.6rem;
+  }
+
+  .who-cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    border: 1px solid #4d2fc8;
+    color: #4d2fc8;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 0.65rem 1rem;
+    transition:
+      background-color var(--motion-duration-fast) var(--motion-ease-standard),
+      color var(--motion-duration-fast) var(--motion-ease-standard);
+  }
+
+  .who-cta:hover,
+  .who-cta:focus-visible {
+    background: #4d2fc8;
+    color: #f8f7ff;
+  }
+
+  .who-media {
+    position: relative;
+    border-radius: 1rem;
+    overflow: hidden;
+    background: #101224;
+    aspect-ratio: 16 / 9;
+    box-shadow: 0 24px 46px -30px rgba(22, 19, 32, 0.55);
+    opacity: 0;
+    transform: translate3d(0, 10px, 0);
+    transition:
+      opacity var(--motion-duration-slow) var(--motion-ease-standard),
+      transform var(--motion-duration-slow) var(--motion-ease-expressive);
+  }
+
+  .who-section[data-visible="true"] .who-wrap,
+  .who-section[data-visible="true"] .who-media {
+    opacity: 1;
+  }
+
+  .who-section[data-visible="true"] .who-copy {
+    transform: translate3d(0, var(--who-copy-shift, 0px), 0);
+  }
+
+  .who-section[data-visible="true"] .who-media {
+    transform: translate3d(0, 0, 0);
+  }
+
+  .who-media video {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+  }
+
+  .who-play {
+    position: absolute;
+    inset: 50% auto auto 50%;
+    transform: translate(-50%, -50%);
+    width: clamp(3rem, 2.25rem + 2vw, 4.4rem);
+    height: clamp(3rem, 2.25rem + 2vw, 4.4rem);
+    border: none;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.93);
+    color: #4d2fc8;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition:
+      transform var(--motion-duration-fast) var(--motion-ease-standard),
+      opacity var(--motion-duration-fast) var(--motion-ease-standard);
+  }
+
+  .who-play:hover,
+  .who-play:focus-visible {
+    transform: translate(-50%, -50%) scale(1.06);
+  }
+
+  .who-play svg {
+    width: 40%;
+    height: 40%;
+    transform: translateX(6%);
+    fill: currentColor;
+  }
+
+  .who-media[data-playing="true"] .who-play {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  @media (min-width: 60rem) {
+    .who-wrap {
+      grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .who-wrap,
+    .who-copy,
+    .who-media,
+    .who-cta,
+    .who-play {
+      transition: none;
+    }
+
+    .who-wrap,
+    .who-media,
+    .who-copy {
+      opacity: 1;
+      transform: none;
+    }
+  }
+</style>
+
+<script is:inline>
+  (() => {
+    const root = document.querySelector("[data-who-root]");
+    if (!root) return;
+
+    const media = root.querySelector("[data-who-media]");
+    const copy = root.querySelector("[data-who-copy]");
+    if (!media || !copy) return;
+
+    const video = media.querySelector("[data-who-video]");
+    const playButton = media.querySelector("[data-who-play]");
+    if (!video || !playButton) return;
+
+    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+
+    const updateEntry = () => {
+      if (prefersReduced.matches) {
+        root.setAttribute("data-visible", "true");
+        root.style.setProperty("--who-copy-shift", "0px");
+        return;
+      }
+
+      const rect = root.getBoundingClientRect();
+      const viewport = window.innerHeight || 1;
+      const centerDelta = viewport * 0.5 - (rect.top + rect.height * 0.5);
+      const subtleShift = clamp((centerDelta / viewport) * -6, -6, 6);
+
+      root.style.setProperty("--who-copy-shift", `${subtleShift.toFixed(2)}px`);
+    };
+
+    const setPlayingState = () => {
+      media.setAttribute("data-playing", String(!video.paused));
+    };
+
+    playButton.addEventListener("click", () => {
+      video.play().catch(() => {});
+    });
+
+    video.addEventListener("play", setPlayingState);
+    video.addEventListener("pause", setPlayingState);
+    video.addEventListener("ended", setPlayingState);
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.target !== root) return;
+          if (entry.isIntersecting) {
+            root.setAttribute("data-visible", "true");
+            updateEntry();
+          }
+        });
+      },
+      { threshold: [0, 0.2, 0.4, 0.7], rootMargin: "140px 0px" },
+    );
+
+    let ticking = false;
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      window.requestAnimationFrame(() => {
+        ticking = false;
+        updateEntry();
+      });
+    };
+
+    observer.observe(root);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+
+    if ("addEventListener" in prefersReduced) {
+      prefersReduced.addEventListener("change", onScroll);
+    } else {
+      prefersReduced.addListener(onScroll);
+    }
+
+    updateEntry();
+    setPlayingState();
+  })();
+</script>

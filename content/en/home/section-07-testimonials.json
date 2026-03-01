@@ -1,0 +1,45 @@
+{
+  "key": "section07",
+  "anchorId": "testimonials",
+  "kicker": "FEEDBACK, UNFILTERED.",
+  "heading": "Testimonials",
+  "summary": "Client testimonials presented with direct, unfiltered clarity.",
+  "testimonials": [
+    {
+      "quote": "They structured our ideas and gave them a clear direction. The process was smooth, controlled, and the final result felt inevitable.",
+      "author": "Marie Gagnon",
+      "role": "Marketing Director",
+      "company": "Horizon Media Group"
+    },
+    {
+      "quote": "An incredible collaboration and faster delivery than ever.",
+      "author": "Marc Dubois",
+      "role": "Brand Manager",
+      "company": "Refuge des Jeunes de Montréal"
+    },
+    {
+      "quote": "They transformed our vision into a striking visual experience.",
+      "author": "Sophie Lefèvre",
+      "role": "Creative Director",
+      "company": "Nexus Conference"
+    },
+    {
+      "quote": "Professionalism, listening, and results beyond our expectations.",
+      "author": "Antoine Moreau",
+      "role": "Founder",
+      "company": "Horizon Tech"
+    },
+    {
+      "quote": "A team that understands urgency without ever sacrificing quality.",
+      "author": "Camille Rousseau",
+      "role": "Communications Lead",
+      "company": "Métropole Culture"
+    },
+    {
+      "quote": "Creative strategists who know how to tell stories that leave a mark.",
+      "author": "Marie-Claire Fournier",
+      "role": "Marketing Director",
+      "company": "Fondation des Jeunes de Montréal"
+    }
+  ]
+}

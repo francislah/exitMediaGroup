@@ -1,0 +1,401 @@
+---
+import type { HomeSectionByKey } from "../lib/content-types";
+
+interface Props {
+  section: HomeSectionByKey<"section02">;
+}
+
+const { section } = Astro.props;
+const topRow = section.logos.filter((_, index) => index % 2 === 0);
+const bottomRowSource = section.logos.filter((_, index) => index % 2 !== 0);
+const bottomRow = bottomRowSource.length > 0 ? bottomRowSource : topRow;
+---
+
+<section id={section.anchorId} data-section={section.key} class="clients-section">
+  <div class="mx-auto max-w-6xl clients-inner">
+    <h2 class="sr-only">{section.heading}</h2>
+    <p class="clients-summary">{section.summary}</p>
+
+    <div
+      class="clients-shell"
+      data-clients-root
+      data-base-speed={section.marquee.baseSpeed}
+      data-boost={section.marquee.scrollBoostMultiplier}
+      role="group"
+      aria-label={section.heading}
+    >
+      <div class="clients-lane" data-lane data-direction="-1">
+        <div class="clients-track" data-track>
+          <ul class="clients-list" data-list="source">
+            {
+              topRow.map((logo) => (
+                <li>
+                  <a href={logo.href} class="clients-logo" aria-label={logo.name}>
+                    <img
+                      src={logo.imageSrc}
+                      alt={logo.imageAlt}
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+          <ul class="clients-list" aria-hidden="true">
+            {
+              topRow.map((logo) => (
+                <li>
+                  <span class="clients-logo clients-logo--decorative">
+                    <img
+                      src={logo.imageSrc}
+                      alt=""
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </span>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+
+      <div class="clients-lane clients-lane-secondary" data-lane data-direction="1">
+        <div class="clients-track" data-track>
+          <ul class="clients-list" data-list="source">
+            {
+              bottomRow.map((logo) => (
+                <li>
+                  <a href={logo.href} class="clients-logo" aria-label={logo.name}>
+                    <img
+                      src={logo.imageSrc}
+                      alt={logo.imageAlt}
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+          <ul class="clients-list" aria-hidden="true">
+            {
+              bottomRow.map((logo) => (
+                <li>
+                  <span class="clients-logo clients-logo--decorative">
+                    <img
+                      src={logo.imageSrc}
+                      alt=""
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </span>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .clients-section {
+    position: relative;
+    padding: clamp(3.75rem, 8vw, 5.5rem) 1.5rem;
+    overflow: clip;
+    background: #f1f1f1;
+    border-color: #d8d8d8;
+  }
+
+  .clients-inner {
+    position: relative;
+    z-index: 1;
+  }
+
+  .clients-summary {
+    margin: 0;
+    text-align: center;
+    color: #6f1bb4;
+    font-family: var(--font-family-display);
+    font-size: clamp(0.68rem, 0.88vw, 0.82rem);
+    font-weight: 650;
+    letter-spacing: 0.16em;
+    line-height: 1.3;
+    text-transform: uppercase;
+  }
+
+  .clients-shell {
+    margin-top: clamp(1.75rem, 2.6vw, 2.2rem);
+    display: grid;
+    gap: clamp(0.85rem, 1.5vw, 1.15rem);
+    overflow: clip;
+    padding: 0.25rem 0;
+  }
+
+  .clients-lane {
+    position: relative;
+    overflow: hidden;
+    mask-image: linear-gradient(
+      to right,
+      transparent 0%,
+      black 2.5%,
+      black 97.5%,
+      transparent 100%
+    );
+  }
+
+  .clients-track {
+    display: flex;
+    width: max-content;
+    transform: translate3d(0, 0, 0);
+    will-change: transform;
+  }
+
+  .clients-list {
+    display: flex;
+    gap: clamp(1.75rem, 3vw, 2.8rem);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    align-items: center;
+  }
+
+  .clients-logo {
+    display: inline-flex;
+    min-width: clamp(3.4rem, 5.8vw, 5.2rem);
+    min-height: clamp(1.8rem, 2.4vw, 2.2rem);
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    text-decoration: none;
+    opacity: 0.66;
+    transition:
+      opacity var(--motion-duration-fast) var(--motion-ease-standard),
+      transform var(--motion-duration-fast) var(--motion-ease-standard);
+  }
+
+  .clients-logo:hover {
+    opacity: 0.95;
+    transform: translateY(-2px);
+  }
+
+  .clients-logo:focus-visible {
+    outline: 2px solid #6f1bb4;
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  .clients-logo img {
+    max-width: clamp(3.5rem, 6vw, 5.6rem);
+    width: auto;
+    height: auto;
+    max-height: clamp(1.25rem, 2.5vw, 1.9rem);
+    object-fit: contain;
+    filter: grayscale(1) contrast(0.78) brightness(0.8);
+  }
+
+  .clients-logo--decorative {
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+    white-space: nowrap;
+  }
+
+  [data-clients-root][data-reduced-motion="true"] .clients-track {
+    width: 100%;
+    transform: none !important;
+    justify-content: center;
+  }
+
+  [data-clients-root][data-reduced-motion="true"]
+    .clients-list[aria-hidden="true"] {
+    display: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .clients-track {
+      width: 100%;
+      transform: none !important;
+      justify-content: center;
+    }
+
+    .clients-list[aria-hidden="true"] {
+      display: none;
+    }
+  }
+
+  @media (min-width: 48rem) {
+    .clients-section {
+      padding-inline: 2.5rem;
+    }
+
+    .clients-logo img {
+      max-width: clamp(4.3rem, 6.8vw, 6.6rem);
+    }
+  }
+</style>
+
+<script is:inline>
+  (() => {
+    const roots = Array.from(document.querySelectorAll("[data-clients-root]"));
+    if (roots.length === 0) return;
+
+    const lerpFactor = 0.09;
+    const boostDurationMs = 240;
+    const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+
+    roots.forEach((root) => {
+      if (!(root instanceof HTMLElement)) return;
+      if (root.dataset.clientsMarqueeReady === "true") return;
+      root.dataset.clientsMarqueeReady = "true";
+
+      const lanes = Array.from(root.querySelectorAll("[data-lane]"));
+      const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+      const baseSpeed = Number(root.getAttribute("data-base-speed") || 26);
+      const boostMultiplier = Number(root.getAttribute("data-boost") || 1.24);
+
+      let currentBoost = 1;
+      let targetBoost = 1;
+      let revertTimerId = 0;
+      let rafId = 0;
+      let lastTime = 0;
+
+      const states = lanes
+        .map((lane) => {
+          const direction = Number(lane.getAttribute("data-direction") || "-1");
+          const track = lane.querySelector("[data-track]");
+          const sourceList = lane.querySelector('[data-list="source"]');
+
+          if (!(track instanceof HTMLElement)) return null;
+          if (!(sourceList instanceof HTMLElement)) return null;
+
+          const width = sourceList.getBoundingClientRect().width;
+          const offset = direction > 0 ? -width : 0;
+
+          track.style.transform = `translate3d(${offset}px, 0, 0)`;
+
+          return { track, sourceList, direction, width, offset };
+        })
+        .filter((state) => state !== null);
+
+      if (states.length === 0) return;
+
+      const setReducedState = (reduced) => {
+        if (reduced) {
+          root.setAttribute("data-reduced-motion", "true");
+        } else {
+          root.removeAttribute("data-reduced-motion");
+        }
+      };
+
+      const recalcWidths = () => {
+        states.forEach((state) => {
+          state.width = state.sourceList.getBoundingClientRect().width;
+          state.offset = state.direction > 0 ? -state.width : 0;
+          state.track.style.transform = `translate3d(${state.offset.toFixed(2)}px, 0, 0)`;
+        });
+      };
+
+      const onScrollBoost = () => {
+        if (mediaQuery.matches) return;
+
+        targetBoost = boostMultiplier;
+        window.clearTimeout(revertTimerId);
+        revertTimerId = window.setTimeout(() => {
+          targetBoost = 1;
+        }, boostDurationMs);
+      };
+
+      const animate = (time) => {
+        if (mediaQuery.matches) return;
+
+        if (!lastTime) {
+          lastTime = time;
+        }
+
+        const dt = clamp((time - lastTime) / 1000, 0, 0.08);
+        lastTime = time;
+
+        currentBoost += (targetBoost - currentBoost) * lerpFactor;
+        const speed = baseSpeed * currentBoost;
+
+        states.forEach((state) => {
+          if (state.width <= 0) return;
+
+          state.offset += state.direction * speed * dt;
+
+          if (state.direction < 0 && state.offset <= -state.width) {
+            state.offset += state.width;
+          }
+
+          if (state.direction > 0 && state.offset >= 0) {
+            state.offset -= state.width;
+          }
+
+          state.track.style.transform = `translate3d(${state.offset.toFixed(2)}px, 0, 0)`;
+        });
+
+        rafId = window.requestAnimationFrame(animate);
+      };
+
+      const stopAnimation = () => {
+        if (rafId) {
+          window.cancelAnimationFrame(rafId);
+          rafId = 0;
+        }
+        lastTime = 0;
+        currentBoost = 1;
+        targetBoost = 1;
+        window.clearTimeout(revertTimerId);
+      };
+
+      const startAnimation = () => {
+        if (rafId || mediaQuery.matches) return;
+        rafId = window.requestAnimationFrame(animate);
+      };
+
+      const syncMotionMode = () => {
+        if (mediaQuery.matches) {
+          setReducedState(true);
+          stopAnimation();
+          states.forEach((state) => {
+            state.track.style.transform = "translate3d(0, 0, 0)";
+          });
+          return;
+        }
+
+        setReducedState(false);
+        recalcWidths();
+        startAnimation();
+      };
+
+      const onMediaChange = () => {
+        syncMotionMode();
+      };
+
+      window.addEventListener("resize", recalcWidths);
+      window.addEventListener("scroll", onScrollBoost, { passive: true });
+
+      if ("addEventListener" in mediaQuery) {
+        mediaQuery.addEventListener("change", onMediaChange);
+      } else {
+        mediaQuery.addListener(onMediaChange);
+      }
+
+      syncMotionMode();
+    });
+  })();
+</script>

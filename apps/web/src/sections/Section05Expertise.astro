@@ -1,0 +1,370 @@
+---
+import type { HomeSectionByKey } from "../lib/content-types";
+
+interface Props {
+  section: HomeSectionByKey<"section05">;
+}
+
+const { section } = Astro.props;
+const defaultActivePanelId = section.panels[0]?.id ?? "";
+---
+
+<section id={section.anchorId} data-section={section.key} class="expertise-section">
+  <div class="expertise-shell" data-expertise-root data-active-panel={defaultActivePanelId}>
+    <p class="expertise-kicker">{section.kicker}</p>
+
+    <div class="expertise-frame" role="list" aria-label={section.heading}>
+      {
+        section.panels.map((panel, index) => {
+          const paragraphs = panel.description
+            .split(/\n+/)
+            .map((part) => part.trim())
+            .filter(Boolean);
+          const lead = paragraphs[0] ?? "";
+          const supporting = paragraphs.slice(1).join(" ");
+          const panelContentId = `${section.anchorId}-${panel.id}-content`;
+          const isActive = index === 0;
+
+          return (
+            <article
+              class="expertise-panel"
+              role="listitem"
+              data-panel
+              data-panel-id={panel.id}
+              data-active={isActive ? "true" : "false"}
+            >
+              <button
+                type="button"
+                class="expertise-hitarea"
+                data-panel-trigger
+                data-panel-id={panel.id}
+                aria-controls={panelContentId}
+                aria-expanded={isActive ? "true" : "false"}
+              >
+                <span class="sr-only">{panel.title}</span>
+              </button>
+
+              <p class="expertise-collapsed-label" aria-hidden="true">
+                {panel.label}
+                {" . "}
+                {panel.title}
+              </p>
+
+              <div
+                class="expertise-panel-content"
+                id={panelContentId}
+                data-panel-content
+                aria-hidden={isActive ? "false" : "true"}
+              >
+                <p class="expertise-panel-meta">
+                  {panel.label}
+                  {" . "}
+                  {panel.title}
+                </p>
+
+                {lead && <p class="expertise-panel-lead">{lead}</p>}
+                {supporting && <p class="expertise-panel-copy">{supporting}</p>}
+
+                <span class="expertise-panel-orb" aria-hidden="true"></span>
+              </div>
+            </article>
+          );
+        })
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .expertise-section {
+    --expertise-top-space: clamp(4.6rem, 8vh, 5.8rem);
+    --expertise-bottom-space: clamp(0.55rem, 1.4vh, 1rem);
+    --expertise-smoke-url: url("/media/hero/smoke_poster.jpg");
+    border-bottom: 1px solid color-mix(in srgb, var(--color-border-subtle) 92%, transparent);
+    height: 100svh;
+    min-height: 100svh;
+    box-sizing: border-box;
+    padding: var(--expertise-top-space) clamp(0.9rem, 4vw, 3rem)
+      var(--expertise-bottom-space);
+    display: flex;
+    position: relative;
+    background:
+      linear-gradient(
+        180deg,
+        rgba(6, 8, 20, 0.12) 0%,
+        rgba(6, 8, 20, 0.06) 50%,
+        rgba(6, 8, 20, 0.15) 100%
+      ),
+      var(--expertise-smoke-url) center / cover no-repeat,
+      radial-gradient(72% 80% at 8% 24%, rgba(22, 112, 255, 0.35) 0%, transparent 62%),
+      radial-gradient(65% 84% at 94% 18%, rgba(255, 137, 56, 0.32) 0%, transparent 62%),
+      radial-gradient(80% 78% at 58% 0%, rgba(180, 76, 255, 0.24) 0%, transparent 66%),
+      linear-gradient(162deg, #0a1848 2%, #1a1258 52%, #28195e 100%);
+    color: var(--color-text-primary);
+  }
+
+  .expertise-shell {
+    position: relative;
+    z-index: 1;
+    width: min(100%, 72rem);
+    margin: 0 auto;
+    height: 100%;
+    min-height: 0;
+    display: grid;
+    grid-template-rows: auto 1fr;
+  }
+
+  .expertise-kicker {
+    margin: 0;
+    text-align: center;
+    font-size: clamp(0.68rem, 0.64rem + 0.16vw, 0.78rem);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: color-mix(in srgb, var(--color-text-primary) 88%, transparent);
+  }
+
+  .expertise-frame {
+    margin-top: clamp(0.7rem, 1.6vw, 1rem);
+    display: flex;
+    min-height: 0;
+    height: 100%;
+    border-radius: clamp(1rem, 2vw, 1.4rem);
+    border: 1px solid color-mix(in srgb, white 84%, transparent);
+    background:
+      linear-gradient(
+        160deg,
+        color-mix(in srgb, #1a0c4f 82%, transparent),
+        color-mix(in srgb, #1a1058 78%, transparent)
+      );
+    box-shadow: 0 24px 54px rgba(5, 8, 26, 0.35);
+    overflow: hidden;
+    backdrop-filter: blur(8px);
+  }
+
+  .expertise-panel {
+    position: relative;
+    flex: 1 1 0;
+    min-width: clamp(3.2rem, 6vw, 4.3rem);
+    border-left: 1px solid color-mix(in srgb, white 26%, transparent);
+    transition: flex 640ms var(--motion-ease-expressive);
+    isolation: isolate;
+  }
+
+  .expertise-panel:first-child {
+    border-left: none;
+  }
+
+  .expertise-panel[data-active="true"] {
+    flex: 3.8 1 0;
+  }
+
+  .expertise-hitarea {
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .expertise-hitarea:focus-visible {
+    outline: 2px solid color-mix(in srgb, white 90%, transparent);
+    outline-offset: -2px;
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .expertise-collapsed-label {
+    position: absolute;
+    right: clamp(0.38rem, 0.7vw, 0.62rem);
+    bottom: clamp(0.8rem, 2vw, 1.3rem);
+    margin: 0;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    transform-origin: center;
+    font-size: clamp(0.98rem, 0.88rem + 0.22vw, 1.12rem);
+    line-height: 1.06;
+    font-weight: 670;
+    letter-spacing: 0.01em;
+    opacity: 0.95;
+    transition:
+      opacity 300ms var(--motion-ease-standard),
+      transform 420ms var(--motion-ease-standard);
+    pointer-events: none;
+  }
+
+  .expertise-panel[data-active="true"] .expertise-collapsed-label {
+    opacity: 0;
+    transform: rotate(180deg) translateY(0.8rem);
+  }
+
+  .expertise-panel-content {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    align-content: start;
+    gap: clamp(0.62rem, 1.1vw, 0.92rem);
+    height: 100%;
+    padding: clamp(0.9rem, 1.8vw, 1.4rem) clamp(0.8rem, 1.7vw, 1.2rem)
+      clamp(0.9rem, 1.6vw, 1.3rem);
+    opacity: 0;
+    transform: translateY(1rem);
+    transition:
+      opacity 220ms var(--motion-ease-standard),
+      transform 300ms var(--motion-ease-standard);
+    pointer-events: none;
+  }
+
+  .expertise-panel[data-active="true"] .expertise-panel-content {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 140ms;
+  }
+
+  .expertise-panel-meta {
+    margin: 0;
+    font-size: clamp(0.9rem, 0.82rem + 0.2vw, 1.02rem);
+    line-height: 1.2;
+    font-weight: 660;
+    letter-spacing: 0.01em;
+    color: color-mix(in srgb, white 96%, transparent);
+  }
+
+  .expertise-panel-lead {
+    margin: 0;
+    max-width: 26ch;
+    font-family: var(--font-family-display);
+    font-size: clamp(1.05rem, 0.88rem + 0.8vw, 1.7rem);
+    font-style: italic;
+    line-height: 1.03;
+    font-weight: 520;
+    letter-spacing: 0.005em;
+    color: color-mix(in srgb, white 92%, transparent);
+    text-wrap: balance;
+  }
+
+  .expertise-panel-copy {
+    margin: 0;
+    max-width: 48ch;
+    font-size: clamp(0.78rem, 0.75rem + 0.14vw, 0.9rem);
+    line-height: 1.3;
+    color: color-mix(in srgb, var(--color-text-secondary) 92%, transparent);
+  }
+
+  .expertise-panel-orb {
+    margin-top: auto;
+    width: clamp(3rem, 6.5vw, 4.6rem);
+    aspect-ratio: 1 / 1;
+    border-radius: 999px;
+    background: radial-gradient(circle at 35% 30%, #f3f3f3 0%, #dcdde4 100%);
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.3),
+      0 12px 36px rgba(9, 14, 37, 0.34);
+  }
+
+  @media (max-width: 54rem) {
+    .expertise-section {
+      --expertise-top-space: clamp(4.2rem, 11vw, 5.3rem);
+      --expertise-bottom-space: clamp(0.5rem, 1.6vw, 0.85rem);
+      padding-inline: clamp(0.65rem, 3vw, 1.25rem);
+    }
+
+    .expertise-frame {
+      margin-top: clamp(0.55rem, 1.4vw, 0.8rem);
+    }
+
+    .expertise-panel[data-active="true"] {
+      flex: 3.2 1 0;
+    }
+
+    .expertise-collapsed-label {
+      font-size: clamp(0.88rem, 0.82rem + 0.2vw, 1rem);
+    }
+
+    .expertise-panel-lead {
+      max-width: 14ch;
+    }
+
+    .expertise-panel-copy {
+      max-width: 24ch;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .expertise-panel,
+    .expertise-collapsed-label,
+    .expertise-panel-content {
+      transition: none;
+    }
+  }
+</style>
+
+<script is:inline>
+  (() => {
+    const roots = document.querySelectorAll("[data-expertise-root]");
+    if (!roots.length) return;
+
+    roots.forEach((root) => {
+      const panels = Array.from(root.querySelectorAll("[data-panel]"));
+      const triggers = Array.from(root.querySelectorAll("[data-panel-trigger]"));
+      if (!panels.length || !triggers.length) return;
+
+      const activatePanel = (panelId) => {
+        root.setAttribute("data-active-panel", panelId);
+
+        panels.forEach((panel) => {
+          const isActive = panel.getAttribute("data-panel-id") === panelId;
+          panel.setAttribute("data-active", isActive ? "true" : "false");
+          const content = panel.querySelector("[data-panel-content]");
+          if (content) content.setAttribute("aria-hidden", isActive ? "false" : "true");
+        });
+
+        triggers.forEach((trigger) => {
+          const isActive = trigger.getAttribute("data-panel-id") === panelId;
+          trigger.setAttribute("aria-expanded", isActive ? "true" : "false");
+        });
+      };
+
+      const activeFromDom =
+        panels.find((panel) => panel.getAttribute("data-active") === "true")?.getAttribute("data-panel-id") ||
+        panels[0]?.getAttribute("data-panel-id");
+
+      if (activeFromDom) activatePanel(activeFromDom);
+
+      triggers.forEach((trigger) => {
+        trigger.addEventListener("click", () => {
+          const panelId = trigger.getAttribute("data-panel-id");
+          if (!panelId) return;
+          activatePanel(panelId);
+        });
+
+        trigger.addEventListener("keydown", (event) => {
+          if (!(event.key === "ArrowRight" || event.key === "ArrowLeft")) return;
+
+          event.preventDefault();
+          const direction = event.key === "ArrowRight" ? 1 : -1;
+          const currentIndex = triggers.indexOf(trigger);
+          const nextIndex = (currentIndex + direction + triggers.length) % triggers.length;
+          const nextTrigger = triggers[nextIndex];
+          if (!nextTrigger) return;
+
+          const panelId = nextTrigger.getAttribute("data-panel-id");
+          if (!panelId) return;
+          activatePanel(panelId);
+          nextTrigger.focus();
+        });
+      });
+    });
+  })();
+</script>

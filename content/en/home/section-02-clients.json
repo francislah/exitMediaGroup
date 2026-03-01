@@ -1,0 +1,103 @@
+{
+  "key": "section02",
+  "anchorId": "clients",
+  "kicker": "Clients",
+  "heading": "Clients",
+  "summary": "THEY BROUGHT THE IDEA. WE BUILT MOMENTUM.",
+  "marquee": {
+    "baseSpeed": 26,
+    "scrollBoostMultiplier": 1.24
+  },
+  "logos": [
+    {
+      "name": "Bell Media",
+      "imageSrc": "/media/clients-logo/bell-media.svg",
+      "imageAlt": "Bell Media logo",
+      "href": "https://example.com/clients/bell-media"
+    },
+    {
+      "name": "Cirque du Soleil",
+      "imageSrc": "/media/clients-logo/cirque-du-soleil.svg",
+      "imageAlt": "Cirque du Soleil logo",
+      "href": "https://example.com/clients/cirque-du-soleil"
+    },
+    {
+      "name": "Sony Music",
+      "imageSrc": "/media/clients-logo/sony-music.svg",
+      "imageAlt": "Sony Music logo",
+      "href": "https://example.com/clients/sony-music"
+    },
+    {
+      "name": "Quartier des Spectacles",
+      "imageSrc": "/media/clients-logo/quartier-des-spectables.svg",
+      "imageAlt": "Quartier des Spectacles logo",
+      "href": "https://example.com/clients/quartier-des-spectacles"
+    },
+    {
+      "name": "Evenko",
+      "imageSrc": "/media/clients-logo/evenko.svg",
+      "imageAlt": "Evenko logo",
+      "href": "https://example.com/clients/evenko"
+    },
+    {
+      "name": "Prime Video",
+      "imageSrc": "/media/clients-logo/prime-video.svg",
+      "imageAlt": "Prime Video logo",
+      "href": "https://example.com/clients/prime-video"
+    },
+    {
+      "name": "Videotron",
+      "imageSrc": "/media/clients-logo/videotron.svg",
+      "imageAlt": "Videotron logo",
+      "href": "https://example.com/clients/videotron"
+    },
+    {
+      "name": "Noovo",
+      "imageSrc": "/media/clients-logo/noovo.svg",
+      "imageAlt": "Noovo logo",
+      "href": "https://example.com/clients/noovo"
+    },
+    {
+      "name": "Crave",
+      "imageSrc": "/media/clients-logo/crave.svg",
+      "imageAlt": "Crave logo",
+      "href": "https://example.com/clients/crave"
+    },
+    {
+      "name": "TVA",
+      "imageSrc": "/media/clients-logo/TVA.svg",
+      "imageAlt": "TVA logo",
+      "href": "https://example.com/clients/tva"
+    },
+    {
+      "name": "FEQ",
+      "imageSrc": "/media/clients-logo/FEQ.svg",
+      "imageAlt": "FEQ logo",
+      "href": "https://example.com/clients/feq"
+    },
+    {
+      "name": "BDC",
+      "imageSrc": "/media/clients-logo/bdc.svg",
+      "imageAlt": "BDC logo",
+      "href": "https://example.com/clients/bdc"
+    },
+    {
+      "name": "La Presse",
+      "imageSrc": "/media/clients-logo/la-presse.svg",
+      "imageAlt": "La Presse logo",
+      "href": "https://example.com/clients/la-presse"
+    },
+    {
+      "name": "Clin d'oeil",
+      "imageSrc": "/media/clients-logo/clin-doeil.svg",
+      "imageAlt": "Clin d'oeil logo",
+      "href": "https://example.com/clients/clin-doeil"
+    },
+    {
+      "name": "Refuge",
+      "imageSrc": "/media/clients-logo/refuge.svg",
+      "imageAlt": "Refuge logo",
+      "href": "https://example.com/clients/refuge"
+    }
+  ]
+}

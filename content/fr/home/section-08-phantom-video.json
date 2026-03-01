@@ -1,0 +1,15 @@
+{
+  "key": "section08",
+  "anchorId": "phantom-video",
+  "kicker": "Section 08",
+  "heading": "Phantom Video",
+  "summary": "Video centrale qui monte en echelle jusqu'au plein ecran.",
+  "video": {
+    "src": "/media/phantom/phantom_showreel.mp4",
+    "poster": "/media/phantom/phantom_showreel_poster.jpg",
+    "width": 1920,
+    "height": 1080,
+    "format": "mp4",
+    "codec": "h264"
+  }
+}

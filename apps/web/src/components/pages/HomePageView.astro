@@ -1,0 +1,265 @@
+---
+import "../../styles/global.css";
+import { getTypedHomePageContent } from "../../content/home";
+import { type Locale, getAlternateLocale, toLocalePath } from "../../lib/i18n";
+import PageFrame from "../ui/PageFrame.astro";
+import Homepage from "../../sections/Homepage.astro";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const homeContent = await getTypedHomePageContent(locale);
+const alternateLocale = getAlternateLocale(locale);
+const alternateHref = toLocalePath(alternateLocale, "/");
+const homeHref = toLocalePath(locale, "/");
+const heroNavigation = homeContent.sections.section01.topNav;
+
+const localizeHref = (href: string): string => {
+  if (href.startsWith("#")) return href;
+  if (!href.startsWith("/")) return href;
+  return toLocalePath(locale, href);
+};
+---
+
+<PageFrame
+  locale={locale}
+  title={homeContent.seo.title}
+  description={homeContent.seo.description}
+>
+  <header class="site-header" data-site-header data-solid="false">
+    <div class="site-header-inner">
+      <a class="site-logo" href={homeHref} aria-label="exitMediaGroup home">
+        <span class="site-logo-wordmark">EXIT</span>
+        <span class="site-logo-sub">MEDIA GROUP</span>
+      </a>
+
+      <nav class="site-nav" aria-label="Primary navigation">
+        <ul>
+          {
+            heroNavigation.links.map((link) => (
+              <li>
+                <a href={localizeHref(link.href)}>{link.label}</a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+
+      <div class="site-header-actions">
+        <a class="site-header-cta" href={localizeHref(heroNavigation.ctaHref)}>
+          {heroNavigation.ctaLabel}
+        </a>
+        <a class="site-header-locale" href={alternateHref}>
+          {alternateLocale.toUpperCase()}
+        </a>
+      </div>
+    </div>
+  </header>
+  <Homepage content={homeContent} locale={locale} />
+</PageFrame>
+
+<style>
+  .site-header {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 70;
+    padding: clamp(0.9rem, 1.6vw, 1.3rem) clamp(1rem, 2.7vw, 2.7rem);
+    border-bottom: 1px solid transparent;
+    transition:
+      background-color var(--motion-duration-base) var(--motion-ease-standard),
+      border-color var(--motion-duration-base) var(--motion-ease-standard),
+      backdrop-filter var(--motion-duration-base) var(--motion-ease-standard),
+      box-shadow var(--motion-duration-base) var(--motion-ease-standard);
+  }
+
+  .site-header[data-solid="true"] {
+    border-bottom-color: rgba(255, 255, 255, 0.12);
+    background: color-mix(in srgb, #060a1a 82%, transparent);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 8px 24px rgba(4, 5, 18, 0.36);
+  }
+
+  .site-header-inner {
+    margin: 0 auto;
+    display: flex;
+    width: 100%;
+    max-width: 90rem;
+    align-items: center;
+    justify-content: space-between;
+    gap: clamp(0.8rem, 1.8vw, 1.6rem);
+  }
+
+  .site-logo {
+    display: grid;
+    gap: 0.12rem;
+    color: rgba(246, 248, 255, 0.96);
+    text-decoration: none;
+    line-height: 1;
+  }
+
+  .site-logo-wordmark {
+    font-family: var(--font-family-display);
+    font-size: clamp(1.1rem, 1.4vw, 1.36rem);
+    font-weight: 560;
+    letter-spacing: 0.07em;
+  }
+
+  .site-logo-sub {
+    font-size: 0.47rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: rgba(246, 248, 255, 0.78);
+  }
+
+  .site-nav ul {
+    margin: 0;
+    display: flex;
+    list-style: none;
+    align-items: center;
+    gap: clamp(0.9rem, 2vw, 2.2rem);
+    padding: 0;
+  }
+
+  .site-nav a {
+    color: rgba(247, 249, 255, 0.88);
+    font-size: 0.71rem;
+    letter-spacing: 0.08em;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition:
+      color var(--motion-duration-fast) var(--motion-ease-standard),
+      opacity var(--motion-duration-fast) var(--motion-ease-standard);
+  }
+
+  .site-nav a:hover,
+  .site-nav a:focus-visible {
+    color: white;
+    opacity: 1;
+  }
+
+  .site-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+  }
+
+  .site-header-cta {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.1rem;
+    border: 1px solid rgba(255, 255, 255, 0.64);
+    border-radius: var(--radius-pill);
+    padding: 0.5rem 1.35rem;
+    color: rgba(255, 255, 255, 0.95);
+    font-size: 0.7rem;
+    font-weight: 620;
+    letter-spacing: 0.08em;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition:
+      border-color var(--motion-duration-fast) var(--motion-ease-standard),
+      background-color var(--motion-duration-fast) var(--motion-ease-standard),
+      color var(--motion-duration-fast) var(--motion-ease-standard);
+  }
+
+  .site-header-cta:hover,
+  .site-header-cta:focus-visible {
+    border-color: white;
+    background: rgba(255, 255, 255, 0.92);
+    color: #111c39;
+  }
+
+  .site-header-locale {
+    display: inline-flex;
+    min-width: 2rem;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: var(--radius-pill);
+    padding: 0.32rem 0.56rem;
+    color: rgba(255, 255, 255, 0.82);
+    font-size: 0.66rem;
+    font-weight: 620;
+    letter-spacing: 0.08em;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition:
+      color var(--motion-duration-fast) var(--motion-ease-standard),
+      border-color var(--motion-duration-fast) var(--motion-ease-standard);
+  }
+
+  .site-header-locale:hover,
+  .site-header-locale:focus-visible {
+    border-color: rgba(255, 255, 255, 0.8);
+    color: white;
+  }
+
+  @media (max-width: 64rem) {
+    .site-nav {
+      display: none;
+    }
+  }
+
+  @media (max-width: 42rem) {
+    .site-header {
+      padding-inline: 0.9rem;
+    }
+
+    .site-header-cta {
+      min-height: 1.85rem;
+      padding-inline: 0.92rem;
+      font-size: 0.62rem;
+    }
+  }
+</style>
+
+<script>
+  let headerTeardown: (() => void) | null = null;
+
+  const setupHeaderScroll = () => {
+    if (headerTeardown) {
+      headerTeardown();
+      headerTeardown = null;
+    }
+
+    const header = document.querySelector("[data-site-header]");
+    const hero = document.querySelector("[data-hero-root]");
+    if (!header || !hero) return;
+
+    let frameRequested = false;
+    const updateHeaderState = () => {
+      const threshold = header.getBoundingClientRect().height + 28;
+      const heroBottom = hero.getBoundingClientRect().bottom;
+      header.setAttribute(
+        "data-solid",
+        heroBottom <= threshold ? "true" : "false",
+      );
+    };
+
+    const requestUpdate = () => {
+      if (frameRequested) return;
+      frameRequested = true;
+      window.requestAnimationFrame(() => {
+        frameRequested = false;
+        updateHeaderState();
+      });
+    };
+
+    window.addEventListener("scroll", requestUpdate, { passive: true });
+    window.addEventListener("resize", requestUpdate);
+    requestUpdate();
+
+    headerTeardown = () => {
+      window.removeEventListener("scroll", requestUpdate);
+      window.removeEventListener("resize", requestUpdate);
+    };
+  };
+
+  document.addEventListener("astro:page-load", setupHeaderScroll);
+</script>

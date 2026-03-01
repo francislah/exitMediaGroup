@@ -1,0 +1,88 @@
+@import "./tokens.css";
+@import "tailwindcss";
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--gradient-hero-smoke) fixed;
+  color: var(--color-text-primary);
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-base);
+}
+
+::selection {
+  background: color-mix(in srgb, var(--color-accent-primary) 45%, transparent);
+  color: var(--color-text-primary);
+}
+
+.site-body {
+  min-height: 100vh;
+  background: var(--gradient-hero-smoke) fixed;
+  color: var(--color-text-primary);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.type-kicker {
+  font-size: var(--font-size-kicker);
+  letter-spacing: var(--letter-spacing-kicker);
+  text-transform: uppercase;
+  color: var(--color-accent-tertiary);
+}
+
+.type-title {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-title);
+  font-weight: 650;
+  line-height: var(--line-height-tight);
+}
+
+.type-display {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-display);
+  font-weight: 700;
+  line-height: var(--line-height-tight);
+}
+
+.text-muted {
+  color: var(--color-text-muted);
+}
+
+.surface-panel {
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-lg);
+  background: color-mix(in srgb, var(--color-bg-elevated) 42%, transparent);
+  backdrop-filter: blur(8px);
+}
+
+.gradient-impact {
+  background: var(--gradient-impact);
+  background-clip: text;
+  color: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0ms !important;
+  }
+}

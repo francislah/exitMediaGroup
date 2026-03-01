@@ -1,0 +1,166 @@
+---
+import type { HomeSectionByKey } from "../lib/content-types";
+
+interface Props {
+  section: HomeSectionByKey<"section08">;
+}
+
+const { section } = Astro.props;
+---
+
+<section id={section.anchorId} data-section={section.key} class="phantom-section" data-phantom-root>
+  <div class="phantom-scroll">
+    <div class="phantom-stage" data-phantom-stage>
+      <h2 class="sr-only">{section.heading}</h2>
+      <p class="sr-only">{section.summary}</p>
+      <div class="phantom-frame" data-phantom-frame>
+        <video
+          class="phantom-video"
+          src={section.video.src}
+          poster={section.video.poster}
+          autoplay
+          muted
+          loop
+          playsinline
+          preload="metadata"
+          aria-label={section.heading}
+        ></video>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .phantom-section {
+    background: #f4f2f8;
+    color: #13102a;
+  }
+
+  .phantom-scroll {
+    height: 265vh;
+    position: relative;
+  }
+
+  .phantom-stage {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    display: grid;
+    place-items: center;
+    overflow: clip;
+  }
+
+  .phantom-frame {
+    width: min(74vw, 70rem);
+    aspect-ratio: 16 / 9;
+    border-radius: clamp(0.75rem, 1.6vw, 1.4rem);
+    overflow: hidden;
+    background: #070a19;
+    box-shadow: 0 22px 40px rgba(10, 9, 23, 0.2);
+    will-change: width, height, border-radius;
+  }
+
+  .phantom-video {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  @media (max-width: 56rem) {
+    .phantom-frame {
+      width: min(86vw, 35rem);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .phantom-scroll {
+      height: auto;
+      min-height: 100vh;
+    }
+
+    .phantom-stage {
+      position: relative;
+      padding: clamp(2rem, 6vw, 3rem) 0;
+    }
+
+    .phantom-frame {
+      width: min(90vw, 68rem);
+      border-radius: 0;
+      box-shadow: none;
+    }
+  }
+</style>
+
+<script is:inline>
+  (() => {
+    const roots = document.querySelectorAll("[data-phantom-root]");
+    if (!roots.length) return;
+
+    const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+    const easeOutCubic = (value) => 1 - Math.pow(1 - value, 3);
+    const lerp = (start, end, progress) => start + (end - start) * progress;
+
+    roots.forEach((root) => {
+      if (!(root instanceof HTMLElement)) return;
+
+      const frame = root.querySelector("[data-phantom-frame]");
+      if (!(frame instanceof HTMLElement)) return;
+
+      const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+      const applyFrameProgress = () => {
+        if (prefersReduced.matches) {
+          frame.style.removeProperty("width");
+          frame.style.removeProperty("height");
+          frame.style.removeProperty("border-radius");
+          frame.style.removeProperty("box-shadow");
+          return;
+        }
+
+        const rect = root.getBoundingClientRect();
+        const viewportWidth = window.innerWidth || 1;
+        const viewportHeight = window.innerHeight || 1;
+
+        const startPoint = viewportHeight * 0.72;
+        const endPoint = -(rect.height - viewportHeight);
+        const progress = clamp((startPoint - rect.top) / (startPoint - endPoint), 0, 1);
+        const eased = easeOutCubic(progress);
+
+        const baseWidth = Math.min(viewportWidth * 0.74, 1120);
+        const baseHeight = baseWidth * (9 / 16);
+
+        const nextWidth = lerp(baseWidth, viewportWidth, eased);
+        const nextHeight = lerp(baseHeight, viewportHeight, eased);
+        const nextRadius = lerp(20, 0, eased);
+        const shadowOpacity = lerp(0.2, 0, eased);
+
+        frame.style.width = `${nextWidth.toFixed(2)}px`;
+        frame.style.height = `${nextHeight.toFixed(2)}px`;
+        frame.style.borderRadius = `${nextRadius.toFixed(2)}px`;
+        frame.style.boxShadow = `0 22px 40px rgba(10, 9, 23, ${shadowOpacity.toFixed(3)})`;
+      };
+
+      applyFrameProgress();
+
+      const onScroll = () => applyFrameProgress();
+      const onResize = () => applyFrameProgress();
+
+      window.addEventListener("scroll", onScroll, { passive: true });
+      window.addEventListener("resize", onResize);
+      prefersReduced.addEventListener("change", onResize);
+    });
+  })();
+</script>

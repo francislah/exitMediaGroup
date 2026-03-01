@@ -1,0 +1,33 @@
+{
+  "key": "section05",
+  "anchorId": "expertise",
+  "kicker": "OUR FIELD OF PLAY",
+  "heading": "Expertise",
+  "summary": "Four complementary areas of expertise built for modern brands.",
+  "panels": [
+    {
+      "id": "brand-entertainment",
+      "label": "01",
+      "title": "Brand Entertainment",
+      "description": "We design powerful narrative formats built to engage and elevate brands.\n\nContent that resonates, entertains, and leaves a mark."
+    },
+    {
+      "id": "strategy-branding",
+      "label": "02",
+      "title": "Strategy & Branding",
+      "description": "We build clear, structured foundations for your brand. Positioning, visual systems, strategic tools are designed to ensure coherence and long-term impact.\n\nA strong identity. A message that resonates."
+    },
+    {
+      "id": "production-video-podcast",
+      "label": "03",
+      "title": "Production vidéo & Podcast",
+      "description": "We develop and produce ambitious content for a wide range of brands. Commercials, series, documentaries, live formats, social content. Each production is agile, precise, and built to perform across all platforms.\n\nFrom concept to distribution."
+    },
+    {
+      "id": "technology-innovation",
+      "label": "04",
+      "title": "Technology & Innovation",
+      "description": "We create immersive experiences in AR, VR, and AI for events, brands, and organizations. Every activation is designed to be useful, engaging, and aligned with a clear objective.\n\nTechnology-led immersive experiences."
+    }
+  ]
+}

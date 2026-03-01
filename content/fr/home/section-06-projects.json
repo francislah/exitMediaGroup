@@ -1,0 +1,87 @@
+{
+  "key": "section06",
+  "anchorId": "projects",
+  "kicker": "Projets",
+  "heading": "Projets",
+  "summary": "Rotation 3D des projets avec reveal immersif.",
+  "orbitTitle": "A QUOI CA RESSEMBLE, EN VRAI?",
+  "allProjectsLabel": "Tous les projets",
+  "backLabel": "Retour",
+  "detailsLabel": "Voir le projet",
+  "projects": [
+    {
+      "id": "fondation-des-jeunes-montreal",
+      "name": "Fondation des jeunes de Montreal",
+      "tagline": "Campagne de marque et production editoriale.",
+      "services": [
+        "Production deleguee",
+        "Brand Entertainment",
+        "Strategie & Branding",
+        "Upstream Strategie",
+        "Production Video"
+      ],
+      "videoSrc": "/media/hero/smoke_av1.webm",
+      "projectUrl": "https://example.com/projects/fondation-des-jeunes-montreal"
+    },
+    {
+      "id": "louise-sigouin-dualites",
+      "name": "Louise Sigouin Masterclass - Les Dualites",
+      "tagline": "Experience masterclass orientee conversion.",
+      "services": [
+        "Brand Entertainment",
+        "Strategie & Branding",
+        "Upstream Strategie",
+        "Site Web",
+        "Production Video"
+      ],
+      "videoSrc": "/media/hero/smoke_av1.webm",
+      "projectUrl": "https://example.com/projects/louise-sigouin-dualites"
+    },
+    {
+      "id": "lancome-genifique-ultimate",
+      "name": "Lancome Paris - Genifique Ultimate",
+      "tagline": "Campagne premium avec talent national.",
+      "services": [
+        "Brand Entertainment",
+        "Production Video"
+      ],
+      "videoSrc": "/media/hero/smoke_av1.webm",
+      "projectUrl": "https://example.com/projects/lancome-genifique-ultimate"
+    },
+    {
+      "id": "loreal-age-perfect-collagen-expert",
+      "name": "L'Oreal Paris - Age Perfect Collagen Expert",
+      "tagline": "Execution campagne nationale multiplateforme.",
+      "services": [
+        "Production Video"
+      ],
+      "videoSrc": "/media/hero/smoke_av1.webm",
+      "projectUrl": "https://example.com/projects/loreal-age-perfect-collagen-expert"
+    },
+    {
+      "id": "raf-podcast-rien-a-foutre",
+      "name": "R.A.F. Podcast (Rien a Foutre)",
+      "tagline": "Concept media natif avec narration longue duree.",
+      "services": [
+        "Brand Entertainment",
+        "Strategie & Branding",
+        "Upstream Strategie",
+        "Production Video",
+        "Podcast"
+      ],
+      "videoSrc": "/media/hero/smoke_av1.webm",
+      "projectUrl": "https://example.com/projects/raf-podcast-rien-a-foutre"
+    },
+    {
+      "id": "narimane-jo-lagence",
+      "name": "Narimane & Jo L'Agence",
+      "tagline": "Positionnement digital et ecosysteme web.",
+      "services": [
+        "Strategie & Branding",
+        "Site Web"
+      ],
+      "videoSrc": "/media/hero/smoke_av1.webm",
+      "projectUrl": "https://example.com/projects/narimane-jo-lagence"
+    }
+  ]
+}

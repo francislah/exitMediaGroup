@@ -1,0 +1,27 @@
+{
+  "key": "section09",
+  "anchorId": "footer",
+  "kicker": "Section 09",
+  "heading": "Footer",
+  "summary": "Marquee final, CTA central, icone et dominos de cloture.",
+  "marqueeText": "ON SE LANCE ?",
+  "ctaLabel": "Renversez-nous avec votre idée",
+  "ctaHref": "#footer-form",
+  "email": "info@exitmediagroup.com",
+  "formLabels": {
+    "nameLabel": "Nom",
+    "emailLabel": "Email",
+    "messageLabel": "Message",
+    "submitLabel": "ENVOYER"
+  },
+  "navLinks": [
+    { "label": "Mentions legales", "href": "/mentions-legales" },
+    { "label": "Confidentialite", "href": "/confidentialite" }
+  ],
+  "copyright": "© 2026 Exit Media Group. Tous droits reserves.",
+  "socialLinks": [
+    { "label": "Instagram", "href": "https://instagram.com/exitmediagroup" },
+    { "label": "LinkedIn", "href": "https://linkedin.com/company/exitmediagroup" },
+    { "label": "Vimeo", "href": "https://vimeo.com/exitmediagroup" }
+  ]
+}
