@@ -13,8 +13,17 @@ const sectionKeys = [
 ] as const;
 
 export type HomeSectionKey = (typeof sectionKeys)[number];
+export const sitePageKeys = [
+  "projects",
+  "privacy",
+  "legal",
+  "about",
+  "contact",
+] as const;
+export type SitePageKey = (typeof sitePageKeys)[number];
 
 const sectionKeySchema = z.enum(sectionKeys);
+const sitePageKeySchema = z.enum(sitePageKeys);
 
 const videoSchema = z.object({
   src: z.string().min(1),
@@ -215,8 +224,41 @@ export const homePageContentSchema = z.object({
   }),
 });
 
+const sitePageNavigationSchema = z.object({
+  homeLabel: z.string().min(1),
+  projectsLabel: z.string().min(1),
+  aboutLabel: z.string().min(1),
+  contactLabel: z.string().min(1),
+});
+
+const sitePageSectionSchema = z.object({
+  heading: z.string().min(1),
+  body: z.string().min(1),
+});
+
+export const sitePageSchema = z.object({
+  key: sitePageKeySchema,
+  slug: z.string().min(1),
+  seo: z.object({
+    title: z.string().min(1),
+    description: z.string().min(1),
+  }),
+  kicker: z.string().min(1),
+  title: z.string().min(1),
+  intro: z.string().min(1),
+  navigation: sitePageNavigationSchema,
+  sections: z.array(sitePageSectionSchema).min(1),
+  contactPanel: z
+    .object({
+      heading: z.string().min(1),
+      intro: z.string().min(1),
+    })
+    .optional(),
+});
+
 export type HomeSectionCommon = z.infer<typeof sectionBaseSchema>;
 export type HomeSections = z.infer<typeof homePageContentSchema>["sections"];
 export type HomeSectionContent = HomeSections[HomeSectionKey];
 export type HomeSectionByKey<K extends HomeSectionKey> = HomeSections[K];
 export type HomePageContent = z.infer<typeof homePageContentSchema>;
+export type SitePageContent = z.infer<typeof sitePageSchema>;

@@ -47,9 +47,13 @@ const navLinks = section.navLinks ?? [];
     </div>
 
     <a
-      href={section.ctaHref}
+      href="#footer-form"
       class="footer__cta footer__cta-animated"
       id="footer-cta"
+      data-footer-cta-trigger
+      data-contact-modal-open-target="footer-form"
+      aria-controls="footer-form"
+      aria-haspopup="dialog"
     >
       {section.ctaLabel}
     </a>
@@ -77,28 +81,34 @@ const navLinks = section.navLinks ?? [];
         )}
       </div>
       <div class="footer__right">
-        <ContactForm
-          formLabels={section.formLabels}
-          locale={locale}
-          result={result}
-        />
-        <a href={`mailto:${section.email}`} class="footer__email">
-          {section.email}
-        </a>
-        <div class="footer__social">
-          {section.socialLinks.map((social) => (
-            <a
-              href={social.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="footer__social-link"
-              aria-label={social.label}
-            >
-              <span class="footer__social-icon" aria-hidden="true">
-                {social.label === "Instagram" ? "IG" : social.label === "LinkedIn" ? "in" : "V"}
-              </span>
-            </a>
-          ))}
+        <div class="footer__contact-actions">
+          <a href={`mailto:${section.email}`} class="footer__email">
+            {section.email}
+          </a>
+          <div class="footer__social">
+            {section.socialLinks.map((social) => (
+              <a
+                href={social.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="footer__social-link"
+                aria-label={social.label}
+              >
+                <span class="footer__social-icon" aria-hidden="true">
+                  {social.label === "Instagram" ? "IG" : social.label === "LinkedIn" ? "in" : "V"}
+                </span>
+              </a>
+            ))}
+          </div>
+        </div>
+        <div class="footer__modal-host" aria-hidden="true">
+          <ContactForm
+            formLabels={section.formLabels}
+            locale={locale}
+            result={result}
+            showTrigger={false}
+            modalId="footer-form"
+          />
         </div>
       </div>
     </div>
@@ -109,9 +119,11 @@ const navLinks = section.navLinks ?? [];
   .footer {
     position: relative;
     padding: 0;
-    min-height: 100vh;
+    min-height: calc(100svh - var(--footer-header-offset, 0px));
     display: flex;
     flex-direction: column;
+    overflow-x: clip;
+    overflow-y: visible;
     background:
       linear-gradient(180deg, transparent 0%, rgba(10, 14, 35, 0.6) 40%, rgba(8, 12, 30, 0.95) 100%),
       radial-gradient(ellipse 80% 50% at 50% 100%, rgba(127, 114, 255, 0.12) 0%, transparent 70%);
@@ -179,6 +191,7 @@ const navLinks = section.navLinks ?? [];
     padding-right: 15%;
     min-height: 340px;
     isolation: isolate;
+    overflow-x: clip;
   }
 
   @media (max-width: 48rem) {
@@ -187,6 +200,7 @@ const navLinks = section.navLinks ?? [];
       padding-right: var(--space-6);
       padding-bottom: clamp(4rem, 10vh, 6rem);
       min-height: 280px;
+      overflow-x: hidden;
     }
   }
 
@@ -349,14 +363,14 @@ const navLinks = section.navLinks ?? [];
   }
 
   .footer__bar {
-    padding: var(--space-3xl) var(--space-6) var(--space-4xl);
-    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    padding: var(--space-2xl) var(--space-6) var(--space-3xl);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
     background: rgba(6, 10, 24, 0.4);
   }
 
   @media (min-width: 48rem) {
     .footer__bar {
-      padding: var(--space-4xl) var(--space-10) var(--space-4xl);
+      padding: var(--space-3xl) var(--space-10) var(--space-4xl);
     }
   }
 
@@ -364,7 +378,7 @@ const navLinks = section.navLinks ?? [];
     max-width: 72rem;
     margin: 0 auto;
     display: grid;
-    gap: var(--space-3xl);
+    gap: var(--space-2xl);
     grid-template-columns: 1fr;
   }
 
@@ -424,6 +438,15 @@ const navLinks = section.navLinks ?? [];
     gap: var(--space-xl);
   }
 
+  .footer__contact-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-md);
+    flex-wrap: wrap;
+    padding-bottom: var(--space-sm);
+  }
+
   .footer__email {
     font-size: 0.9375rem;
     font-weight: 500;
@@ -465,6 +488,12 @@ const navLinks = section.navLinks ?? [];
     background: rgba(255, 255, 255, 0.04);
   }
 
+  .footer__modal-host {
+    width: 0;
+    height: 0;
+    overflow: hidden;
+  }
+
   .footer[data-reduced-motion="true"] .footer__ball,
   .footer[data-reduced-motion="true"] .footer__domino {
     display: none;
@@ -484,6 +513,15 @@ const navLinks = section.navLinks ?? [];
   import { initSection09Footer } from "../lib/section09-footer";
 
   let footerTeardown: (() => void) | null = null;
+  let resizeTeardown: (() => void) | null = null;
+
+  const syncFooterViewport = () => {
+    const root = document.querySelector("[data-footer-root]");
+    const header = document.querySelector<HTMLElement>("[data-site-header]");
+    if (!(root instanceof HTMLElement)) return;
+    const offset = header?.getBoundingClientRect().height ?? 0;
+    root.style.setProperty("--footer-header-offset", `${offset}px`);
+  };
 
   const setupFooterAnimation = () => {
     if (footerTeardown) {
@@ -507,7 +545,22 @@ const navLinks = section.navLinks ?? [];
     });
   };
 
-  document.addEventListener("astro:page-load", setupFooterAnimation);
+  const setupFooter = () => {
+    if (resizeTeardown) {
+      resizeTeardown();
+      resizeTeardown = null;
+    }
+
+    syncFooterViewport();
+    setupFooterAnimation();
+
+    const onResize = () => syncFooterViewport();
+    window.addEventListener("resize", onResize);
+    resizeTeardown = () => window.removeEventListener("resize", onResize);
+  };
+
+  setupFooter();
+  document.addEventListener("astro:page-load", setupFooter);
 </script>
 
 <script is:inline>

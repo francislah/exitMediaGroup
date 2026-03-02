@@ -1,7 +1,4 @@
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-gsap.registerPlugin(ScrollTrigger);
 
 export interface Section09InitOptions {
   root: HTMLElement;
@@ -114,10 +111,10 @@ function measureDominoChainCollision(dominos: HTMLElement[]): DominoChainCollisi
 }
 
 /**
- * Scroll-driven 2D animation:
- * - Ball rolls, hits first domino
- * - Dominoes fall in a clear chained cascade (1 -> 2 -> 3)
- * - All three are fully fallen at end-of-scroll
+ * One-shot 2D animation:
+ * - Ball rolls once and hits first domino
+ * - Dominoes fall in chained cascade (1 -> 2 -> 3)
+ * - CTA appears once animation completes
  */
 export function initSection09Footer(options: Section09InitOptions): () => void {
   const { root, onCTAVisible } = options;
@@ -153,6 +150,9 @@ export function initSection09Footer(options: Section09InitOptions): () => void {
   });
   const stage = root.querySelector<HTMLElement>(".footer__stage");
   if (stage) resizeObserver.observe(stage);
+
+  let progress = 0;
+  let tween: gsap.core.Tween | null = null;
 
   const applyProgress = (rawProgress: number) => {
     if (!ball || dominos.length < 3) return;
@@ -199,20 +199,61 @@ export function initSection09Footer(options: Section09InitOptions): () => void {
     if (d3) d3.style.transform = `rotate(${d3Rotate}deg)`;
   };
 
-  const trigger = ScrollTrigger.create({
-    trigger: root,
-    start: "top 80%",
-    end: "bottom 45%",
-    scrub: true,
-    onUpdate: (self) => {
-      const progress = clamp(self.progress, 0, 1);
-      applyProgress(progress);
-      onCTAVisible?.(progress > 0.88);
-    },
-  });
+  applyProgress(0);
+  onCTAVisible?.(false);
+
+  let hasPlayed = false;
+  const playAnimation = () => {
+    if (hasPlayed) return;
+    hasPlayed = true;
+    tween?.kill();
+    tween = gsap.to(
+      { value: 0 },
+      {
+        value: 1,
+        duration: 2.3,
+        ease: "power2.inOut",
+        onUpdate: function onTick() {
+          progress = this.targets()[0].value as number;
+          applyProgress(progress);
+        },
+        onComplete: () => {
+          progress = 1;
+          applyProgress(progress);
+          onCTAVisible?.(true);
+        },
+      },
+    );
+  };
+
+  const inView = () => {
+    const rect = root.getBoundingClientRect();
+    return (
+      rect.top < window.innerHeight * 0.8 &&
+      rect.bottom > window.innerHeight * 0.2
+    );
+  };
+
+  let observer: IntersectionObserver | null = null;
+  if (inView()) {
+    playAnimation();
+  } else {
+    observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          playAnimation();
+          observer?.disconnect();
+          observer = null;
+        }
+      },
+      { threshold: 0.25 },
+    );
+    observer.observe(root);
+  }
 
   return () => {
-    trigger.kill();
+    tween?.kill();
+    observer?.disconnect();
     resizeObserver.disconnect();
     if (ball) ball.style.transform = "";
     dominos.forEach((d) => (d.style.transform = ""));

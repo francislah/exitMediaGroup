@@ -1,0 +1,31 @@
+{
+  "key": "contact",
+  "slug": "nous-contacter",
+  "seo": {
+    "title": "Nous contacter | Exit Media Group",
+    "description": "Contactez Exit Media Group pour lancer votre prochain projet."
+  },
+  "kicker": "Contact",
+  "title": "Nous contacter",
+  "intro": "Parlez-nous de votre contexte, de vos objectifs et du niveau d'ambition recherche.",
+  "navigation": {
+    "homeLabel": "Accueil",
+    "projectsLabel": "Projects",
+    "aboutLabel": "A propos",
+    "contactLabel": "Contact"
+  },
+  "sections": [
+    {
+      "heading": "Delais de reponse",
+      "body": "Nous repondons generalement sous 1 a 2 jours ouvres."
+    },
+    {
+      "heading": "Email direct",
+      "body": "info@exitmediagroup.com"
+    }
+  ],
+  "contactPanel": {
+    "heading": "Dites-nous tout",
+    "intro": "Nous revenons vers vous avec une proposition claire."
+  }
+}

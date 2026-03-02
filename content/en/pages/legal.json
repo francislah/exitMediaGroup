@@ -1,0 +1,31 @@
+{
+  "key": "legal",
+  "slug": "legal",
+  "seo": {
+    "title": "Legal | Exit Media Group",
+    "description": "Legal information about site publishing, hosting, and intellectual property."
+  },
+  "kicker": "Information",
+  "title": "Legal",
+  "intro": "This page provides legal information related to the Exit Media Group website.",
+  "navigation": {
+    "homeLabel": "Home",
+    "projectsLabel": "Projects",
+    "aboutLabel": "About",
+    "contactLabel": "Contact"
+  },
+  "sections": [
+    {
+      "heading": "Site publisher",
+      "body": "Exit Media Group, Montreal, Quebec, Canada. Contact: info@exitmediagroup.com."
+    },
+    {
+      "heading": "Hosting",
+      "body": "The website is hosted on secure cloud infrastructure with continuous monitoring."
+    },
+    {
+      "heading": "Intellectual property",
+      "body": "All content (text, visuals, brand identity) is protected and cannot be reproduced without prior authorization."
+    }
+  ]
+}

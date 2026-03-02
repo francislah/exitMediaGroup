@@ -4,4 +4,6 @@ export type {
   HomePageContent,
   HomeSectionContent,
   HomeSectionKey,
+  SitePageContent,
+  SitePageKey,
 } from "./content-schemas";

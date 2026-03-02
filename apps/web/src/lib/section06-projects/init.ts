@@ -133,11 +133,11 @@ export function initSection06Projects(options: Section06InitOptions): void {
     new THREE.MeshBasicMaterial({
       color: 0x18254f,
       transparent: true,
-      opacity: 0.26,
+      opacity: 0.12,
     }),
   );
   groundGlow.rotation.x = -Math.PI / 2;
-  groundGlow.position.set(0, -2.38, -0.3);
+  groundGlow.position.set(0, -2.62, -1.2);
   scene.add(groundGlow);
 
   const CARD_WIDTH = 2.22;
@@ -191,16 +191,16 @@ export function initSection06Projects(options: Section06InitOptions): void {
 
     const front = new THREE.MeshPhysicalMaterial({
       map: frontTexture,
-      roughness: 0.42,
-      metalness: 0.16,
-      clearcoat: 0.28,
-      clearcoatRoughness: 0.28,
-      envMapIntensity: 0.98,
+      roughness: 0.58,
+      metalness: 0.08,
+      clearcoat: 0.12,
+      clearcoatRoughness: 0.46,
+      envMapIntensity: 0.62,
       roughnessMap,
       bumpMap,
-      bumpScale: 0.02,
+      bumpScale: 0.014,
       emissive: 0x090d1f,
-      emissiveIntensity: 0.06,
+      emissiveIntensity: 0.03,
     });
 
     const back = new THREE.MeshPhysicalMaterial({
@@ -274,6 +274,7 @@ export function initSection06Projects(options: Section06InitOptions): void {
     entry.materials.forEach((material) => {
       material.transparent = opacity < 0.995;
       material.opacity = opacity;
+      material.depthWrite = opacity >= 0.995;
     });
   };
 
@@ -398,16 +399,21 @@ export function initSection06Projects(options: Section06InitOptions): void {
       entry.mesh.rotateX(Math.cos(angle) * 0.024);
 
       if (activeIndex === -1) {
-        const motionOpacity = 0.7 + depthNorm * 0.3;
-        setMeshOpacity(entry, motionOpacity);
+        // Keep cards opaque during orbit to avoid transparency sorting artifacts.
+        setMeshOpacity(entry, 1);
       } else {
-        setMeshOpacity(entry, activeIndex === index ? 0.98 : 0.07);
+        setMeshOpacity(entry, activeIndex === index ? 0.98 : 0.12);
       }
 
       const frontMaterial = entry.materials[4];
+      // Keep face readable when card points toward camera:
+      // reduce clearcoat/env highlights as depthNorm approaches front.
       frontMaterial.emissiveIntensity =
-        activeIndex === index ? 0.12 : 0.04 + depthNorm * 0.08;
-      frontMaterial.clearcoat = 0.24 + depthNorm * 0.1;
+        activeIndex === index ? 0.05 : 0.06 - depthNorm * 0.03;
+      frontMaterial.clearcoat =
+        activeIndex === index ? 0.16 : 0.17 - depthNorm * 0.06;
+      frontMaterial.envMapIntensity =
+        activeIndex === index ? 0.7 : 0.7 - depthNorm * 0.16;
 
       if (z > frontDepth) {
         frontDepth = z;

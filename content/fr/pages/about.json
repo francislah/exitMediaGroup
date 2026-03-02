@@ -1,0 +1,27 @@
+{
+  "key": "about",
+  "slug": "a-propos",
+  "seo": {
+    "title": "A propos | Exit Media Group",
+    "description": "Decouvrez l'approche, l'equipe et la vision d'Exit Media Group."
+  },
+  "kicker": "Studio",
+  "title": "A propos",
+  "intro": "Nous sommes un studio creatif qui connecte strategie, production et impact culturel.",
+  "navigation": {
+    "homeLabel": "Accueil",
+    "projectsLabel": "Projects",
+    "aboutLabel": "A propos",
+    "contactLabel": "Contact"
+  },
+  "sections": [
+    {
+      "heading": "Notre approche",
+      "body": "Nous construisons des systemes de marque performants avec une execution rapide et exigeante."
+    },
+    {
+      "heading": "Notre equipe",
+      "body": "Strateges, realisateurs, motion designers et producteurs travaillent en sprint dans une meme boucle de decision."
+    }
+  ]
+}

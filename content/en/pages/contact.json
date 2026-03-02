@@ -1,0 +1,31 @@
+{
+  "key": "contact",
+  "slug": "contact",
+  "seo": {
+    "title": "Contact | Exit Media Group",
+    "description": "Get in touch with Exit Media Group to launch your next project."
+  },
+  "kicker": "Contact",
+  "title": "Contact",
+  "intro": "Share your context, goals, and timeline. We will come back with a focused recommendation.",
+  "navigation": {
+    "homeLabel": "Home",
+    "projectsLabel": "Projects",
+    "aboutLabel": "About",
+    "contactLabel": "Contact"
+  },
+  "sections": [
+    {
+      "heading": "Response time",
+      "body": "We usually reply within 1 to 2 business days."
+    },
+    {
+      "heading": "Direct email",
+      "body": "info@exitmediagroup.com"
+    }
+  ],
+  "contactPanel": {
+    "heading": "Tell us everything",
+    "intro": "We will reply with a clear recommendation."
+  }
+}

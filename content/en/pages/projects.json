@@ -1,0 +1,27 @@
+{
+  "key": "projects",
+  "slug": "projects",
+  "seo": {
+    "title": "Projects | Exit Media Group",
+    "description": "Explore selected productions and brand campaigns from Exit Media Group."
+  },
+  "kicker": "Portfolio",
+  "title": "Projects",
+  "intro": "A selection of work built at the intersection of strategy, creation, and production.",
+  "navigation": {
+    "homeLabel": "Home",
+    "projectsLabel": "Projects",
+    "aboutLabel": "About",
+    "contactLabel": "Contact"
+  },
+  "sections": [
+    {
+      "heading": "Creative direction",
+      "body": "Every project is shaped around a clear narrative and a visual system aligned with the brand."
+    },
+    {
+      "heading": "Multi-format production",
+      "body": "Deliverables span social, broadcast, live experiences, and digital touchpoints."
+    }
+  ]
+}

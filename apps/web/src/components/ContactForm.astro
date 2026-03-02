@@ -13,94 +13,327 @@ interface Props {
   formLabels: FormLabels;
   locale: "fr" | "en";
   result?: Awaited<ReturnType<typeof actions.sendContact>>;
+  triggerLabel?: string;
+  showTrigger?: boolean;
+  modalId?: string;
 }
 
-const { formLabels, locale, result } = Astro.props;
+const {
+  formLabels,
+  locale,
+  result,
+  triggerLabel,
+  showTrigger = true,
+  modalId = "footer-form",
+} = Astro.props;
 const hasError = result?.error;
 const hasSuccess = result?.data?.success;
 const inputErrors = isInputError(hasError) ? hasError.fields : {};
+const resolvedTriggerLabel =
+  triggerLabel ?? (locale === "fr" ? "Nous contacter" : "Contact us");
 ---
 
-<div class="contact-form" id="footer-form">
-  {hasSuccess && (
-    <p class="contact-form__success" role="status">
-      {locale === "fr"
-        ? "Votre message a bien été envoyé. Nous vous répondrons rapidement."
-        : "Your message has been sent. We will get back to you soon."}
-    </p>
+<div class="contact-form">
+  {showTrigger && (
+    <button
+      type="button"
+      class="contact-form__open"
+      data-contact-modal-open-target={modalId}
+    >
+      {resolvedTriggerLabel}
+    </button>
   )}
-  {hasError && !isInputError(hasError) && (
-    <p class="contact-form__error" role="alert">
-      {hasError.message}
-    </p>
-  )}
-  <form
-    method="POST"
-    action={actions.sendContact}
-    class="contact-form__form"
+
+  <dialog
+    id={modalId}
+    class="contact-form__modal"
+    data-contact-modal
+    data-contact-modal-id={modalId}
     aria-label={locale === "fr" ? "Formulaire de contact" : "Contact form"}
   >
-    <input type="hidden" name="locale" value={locale} />
-    <div class="contact-form__field">
-      <label for="contact-name">{formLabels.nameLabel}</label>
-      <input
-        id="contact-name"
-        type="text"
-        name="name"
-        required
-        autocomplete="name"
-        class="contact-form__input"
-        aria-describedby={inputErrors.name ? "contact-name-error" : undefined}
-        aria-invalid={!!inputErrors.name}
-      />
-      {inputErrors?.name && (
-        <span id="contact-name-error" class="contact-form__field-error">
-          {inputErrors.name.join(", ")}
-        </span>
-      )}
+    <div class="contact-form__modal-head">
+      <h3>{locale === "fr" ? "Parlons de votre projet" : "Let's talk about your project"}</h3>
+      <button
+        type="button"
+        class="contact-form__close"
+        data-contact-modal-close
+        aria-label={locale === "fr" ? "Fermer" : "Close"}
+      >
+        ×
+      </button>
     </div>
-    <div class="contact-form__field">
-      <label for="contact-email">{formLabels.emailLabel}</label>
-      <input
-        id="contact-email"
-        type="email"
-        name="email"
-        required
-        autocomplete="email"
-        class="contact-form__input"
-        aria-describedby={inputErrors.email ? "contact-email-error" : undefined}
-        aria-invalid={!!inputErrors.email}
-      />
-      {inputErrors?.email && (
-        <span id="contact-email-error" class="contact-form__field-error">
-          {inputErrors.email.join(", ")}
-        </span>
-      )}
-    </div>
-    <div class="contact-form__field">
-      <label for="contact-message">{formLabels.messageLabel}</label>
-      <textarea
-        id="contact-message"
-        name="message"
-        required
-        rows={4}
-        class="contact-form__input contact-form__textarea"
-        aria-describedby={inputErrors.message ? "contact-message-error" : undefined}
-        aria-invalid={!!inputErrors.message}
-      />
-      {inputErrors?.message && (
-        <span id="contact-message-error" class="contact-form__field-error">
-          {inputErrors.message.join(", ")}
-        </span>
-      )}
-    </div>
-    <button type="submit" class="contact-form__submit">
-      {formLabels.submitLabel}
-    </button>
-  </form>
+    {hasSuccess && (
+      <p class="contact-form__success" role="status">
+        {locale === "fr"
+          ? "Votre message a bien ete envoye. Nous vous repondrons rapidement."
+          : "Your message has been sent. We will get back to you soon."}
+      </p>
+    )}
+    {hasError && !isInputError(hasError) && (
+      <p class="contact-form__error" role="alert">
+        {hasError.message}
+      </p>
+    )}
+    <form
+      method="POST"
+      action={`${actions.sendContact}#${modalId}`}
+      class="contact-form__form"
+      data-contact-form-id={modalId}
+      data-contact-has-error={hasError ? "true" : "false"}
+      data-contact-has-success={hasSuccess ? "true" : "false"}
+      aria-label={locale === "fr" ? "Formulaire de contact" : "Contact form"}
+    >
+      <input type="hidden" name="locale" value={locale} />
+      <div class="contact-form__field">
+        <label for={`${modalId}-name`}>{formLabels.nameLabel}</label>
+        <input
+          id={`${modalId}-name`}
+          type="text"
+          name="name"
+          required
+          autocomplete="name"
+          class="contact-form__input"
+          aria-describedby={inputErrors.name ? `${modalId}-name-error` : undefined}
+          aria-invalid={!!inputErrors.name}
+        />
+        {inputErrors?.name && (
+          <span id={`${modalId}-name-error`} class="contact-form__field-error">
+            {inputErrors.name.join(", ")}
+          </span>
+        )}
+      </div>
+      <div class="contact-form__field">
+        <label for={`${modalId}-email`}>{formLabels.emailLabel}</label>
+        <input
+          id={`${modalId}-email`}
+          type="email"
+          name="email"
+          required
+          autocomplete="email"
+          class="contact-form__input"
+          aria-describedby={inputErrors.email ? `${modalId}-email-error` : undefined}
+          aria-invalid={!!inputErrors.email}
+        />
+        {inputErrors?.email && (
+          <span id={`${modalId}-email-error`} class="contact-form__field-error">
+            {inputErrors.email.join(", ")}
+          </span>
+        )}
+      </div>
+      <div class="contact-form__field">
+        <label for={`${modalId}-message`}>{formLabels.messageLabel}</label>
+        <textarea
+          id={`${modalId}-message`}
+          name="message"
+          required
+          rows={4}
+          class="contact-form__input contact-form__textarea"
+          aria-describedby={inputErrors.message ? `${modalId}-message-error` : undefined}
+          aria-invalid={!!inputErrors.message}
+        />
+        {inputErrors?.message && (
+          <span id={`${modalId}-message-error`} class="contact-form__field-error">
+            {inputErrors.message.join(", ")}
+          </span>
+        )}
+      </div>
+      <button type="submit" class="contact-form__submit">
+        {formLabels.submitLabel}
+      </button>
+    </form>
+  </dialog>
 </div>
 
+<script>
+  const setupContactModal = () => {
+    const getDraftKey = (id: string) => `contact-form-draft:${id}`;
+    const readDraft = (id: string): Partial<Record<"name" | "email" | "message", string>> => {
+      try {
+        const raw = window.sessionStorage.getItem(getDraftKey(id));
+        if (!raw) return {};
+        const parsed = JSON.parse(raw) as Partial<Record<"name" | "email" | "message", string>>;
+        return parsed ?? {};
+      } catch {
+        return {};
+      }
+    };
+
+    const writeDraft = (id: string, payload: Partial<Record<"name" | "email" | "message", string>>) => {
+      try {
+        window.sessionStorage.setItem(getDraftKey(id), JSON.stringify(payload));
+      } catch {
+        // Ignore storage failures so submit flow is never blocked.
+      }
+    };
+
+    const clearDraft = (id: string) => {
+      try {
+        window.sessionStorage.removeItem(getDraftKey(id));
+      } catch {
+        // Ignore storage failures.
+      }
+    };
+
+    document.querySelectorAll<HTMLFormElement>("[data-contact-form-id]").forEach((form) => {
+      const id = form.getAttribute("data-contact-form-id");
+      if (!id || form.dataset.formBound === "true") return;
+      form.dataset.formBound = "true";
+
+      const nameInput = form.querySelector<HTMLInputElement>('input[name="name"]');
+      const emailInput = form.querySelector<HTMLInputElement>('input[name="email"]');
+      const messageInput = form.querySelector<HTMLTextAreaElement>('textarea[name="message"]');
+
+      const hasError = form.getAttribute("data-contact-has-error") === "true";
+      const hasSuccess = form.getAttribute("data-contact-has-success") === "true";
+
+      if (hasSuccess) {
+        clearDraft(id);
+      }
+
+      if (hasError) {
+        const draft = readDraft(id);
+        if (nameInput && draft.name) nameInput.value = draft.name;
+        if (emailInput && draft.email) emailInput.value = draft.email;
+        if (messageInput && draft.message) messageInput.value = draft.message;
+      }
+
+      form.addEventListener("submit", () => {
+        writeDraft(id, {
+          name: nameInput?.value ?? "",
+          email: emailInput?.value ?? "",
+          message: messageInput?.value ?? "",
+        });
+      });
+    });
+
+    const modals = document.querySelectorAll("[data-contact-modal]");
+
+    modals.forEach((node) => {
+      if (!(node instanceof HTMLDialogElement)) return;
+      if (node.dataset.modalBound === "true") return;
+      const id = node.getAttribute("data-contact-modal-id");
+      if (!id) return;
+      node.dataset.modalBound = "true";
+
+      const openModal = () => {
+        if (typeof node.showModal === "function" && !node.open) {
+          node.showModal();
+        }
+      };
+
+      const closeModal = () => {
+        if (node.open) node.close();
+      };
+
+      document
+        .querySelectorAll(`[data-contact-modal-open-target="${id}"]`)
+        .forEach((trigger) => {
+          if (!(trigger instanceof HTMLElement)) return;
+          trigger.addEventListener("click", (event) => {
+            event.preventDefault();
+            openModal();
+          });
+        });
+
+      node.addEventListener("click", (event) => {
+        if (event.target === node) closeModal();
+      });
+
+      node.querySelectorAll("[data-contact-modal-close]").forEach((closeTrigger) => {
+        closeTrigger.addEventListener("click", () => closeModal());
+      });
+
+      if (window.location.hash === `#${id}`) {
+        openModal();
+      }
+    });
+  };
+
+  document.addEventListener("astro:page-load", setupContactModal);
+</script>
+
 <style>
+  .contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+
+  .contact-form__open {
+    align-self: flex-start;
+    margin-top: var(--space-xs);
+    padding: var(--space-md) var(--space-2xl);
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: var(--radius-md);
+    color: var(--color-text-primary);
+    font-family: var(--font-family-display);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition:
+      border-color var(--motion-duration-fast) var(--motion-ease-standard),
+      color var(--motion-duration-fast) var(--motion-ease-standard),
+      background var(--motion-duration-fast) var(--motion-ease-standard),
+      transform var(--motion-duration-fast) var(--motion-ease-standard);
+  }
+
+  .contact-form__open:hover {
+    border-color: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    transform: translateY(-1px);
+  }
+
+  .contact-form__modal {
+    position: fixed;
+    inset: 0;
+    margin: auto;
+    width: min(100%, 34rem);
+    max-height: min(90svh, 46rem);
+    overflow: auto;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: var(--radius-lg);
+    background: color-mix(in srgb, var(--color-bg-canvas) 90%, transparent);
+    color: var(--color-text-primary);
+    padding: clamp(1rem, 2.8vw, 1.5rem);
+    box-shadow: 0 20px 50px rgba(2, 4, 14, 0.55);
+  }
+
+  .contact-form__modal::backdrop {
+    background: rgba(5, 8, 22, 0.7);
+    backdrop-filter: blur(4px);
+  }
+
+  .contact-form__modal-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.8rem;
+  }
+
+  .contact-form__modal-head h3 {
+    margin: 0;
+    font-family: var(--font-family-display);
+    font-size: 1.05rem;
+  }
+
+  .contact-form__close {
+    border: 0;
+    background: transparent;
+    color: var(--color-text-secondary);
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  .contact-form__close:hover {
+    color: var(--color-text-primary);
+  }
+
   .contact-form__success {
     padding: var(--space-md) var(--space-lg);
     margin-bottom: var(--space-lg);
@@ -226,5 +459,12 @@ const inputErrors = isInputError(hasError) ? hasError.fields : {};
 
   .contact-form__submit:active {
     transform: translateY(0);
+  }
+
+  @media (max-width: 48rem) {
+    .contact-form__modal {
+      width: min(100%, 92vw);
+      padding: 1rem;
+    }
   }
 </style>

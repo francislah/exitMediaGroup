@@ -1,0 +1,31 @@
+{
+  "key": "legal",
+  "slug": "mentions-legales",
+  "seo": {
+    "title": "Mentions legales | Exit Media Group",
+    "description": "Informations legales relatives a l'editeur, l'hebergement et la responsabilite."
+  },
+  "kicker": "Informations",
+  "title": "Mentions legales",
+  "intro": "Retrouvez ici les informations juridiques relatives au site Exit Media Group.",
+  "navigation": {
+    "homeLabel": "Accueil",
+    "projectsLabel": "Projects",
+    "aboutLabel": "A propos",
+    "contactLabel": "Contact"
+  },
+  "sections": [
+    {
+      "heading": "Editeur du site",
+      "body": "Exit Media Group, Montreal, Quebec, Canada. Contact: info@exitmediagroup.com."
+    },
+    {
+      "heading": "Hebergement",
+      "body": "Le site est heberge sur une infrastructure cloud securisee avec supervision continue."
+    },
+    {
+      "heading": "Propriete intellectuelle",
+      "body": "L'ensemble des contenus (textes, visuels, identite) est protege. Toute reproduction non autorisee est interdite."
+    }
+  ]
+}

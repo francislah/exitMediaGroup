@@ -1,7 +1,16 @@
 import { readFile } from "node:fs/promises";
 import { join, resolve } from "node:path";
-import type { HomePageContent, HomeSectionKey } from "./content-types";
-import { sectionSchemaMap, homePageContentSchema } from "./content-schemas";
+import type {
+  HomePageContent,
+  HomeSectionKey,
+  SitePageContent,
+  SitePageKey,
+} from "./content-types";
+import {
+  sectionSchemaMap,
+  homePageContentSchema,
+  sitePageSchema,
+} from "./content-schemas";
 import type { Locale } from "./i18n";
 
 const CONTENT_ROOT = resolve(process.cwd(), "..", "..", "content");
@@ -16,6 +25,14 @@ const sectionFileByKey: Record<HomeSectionKey, string> = {
   section07: "section-07-testimonials.json",
   section08: "section-08-phantom-video.json",
   section09: "section-09-footer.json",
+};
+
+const sitePageFileByKey: Record<SitePageKey, string> = {
+  projects: "projects.json",
+  privacy: "privacy.json",
+  legal: "legal.json",
+  about: "about.json",
+  contact: "contact.json",
 };
 
 async function readJsonFile(filePath: string): Promise<unknown> {
@@ -65,6 +82,22 @@ export async function loadHomePageContent(
     seo: sections.section01.seo,
     sections,
   });
+}
+
+export async function loadSitePageContent(
+  locale: Locale,
+  key: SitePageKey,
+): Promise<SitePageContent> {
+  const filePath = join(CONTENT_ROOT, locale, "pages", sitePageFileByKey[key]);
+  const payload = await readJsonFile(filePath);
+
+  try {
+    return await sitePageSchema.parseAsync(payload);
+  } catch (error) {
+    throw new Error(`Schema validation failed for ${filePath}`, {
+      cause: error,
+    });
+  }
 }
 
 export function getContentRootPath(): string {

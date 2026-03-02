@@ -1,0 +1,31 @@
+{
+  "key": "privacy",
+  "slug": "confidentialite",
+  "seo": {
+    "title": "Confidentialite | Exit Media Group",
+    "description": "Informations sur la collecte, l'usage et la protection de vos donnees."
+  },
+  "kicker": "Politique",
+  "title": "Confidentialite",
+  "intro": "Nous traitons vos donnees avec rigueur, transparence et proportionnalite.",
+  "navigation": {
+    "homeLabel": "Accueil",
+    "projectsLabel": "Projects",
+    "aboutLabel": "A propos",
+    "contactLabel": "Contact"
+  },
+  "sections": [
+    {
+      "heading": "Donnees collectees",
+      "body": "Nous pouvons collecter les informations que vous soumettez via nos formulaires (nom, email, message) et des donnees techniques de navigation."
+    },
+    {
+      "heading": "Utilisation",
+      "body": "Ces donnees servent a repondre a vos demandes, ameliorer notre service et assurer le suivi des echanges commerciaux."
+    },
+    {
+      "heading": "Vos droits",
+      "body": "Vous pouvez demander l'acces, la correction ou la suppression de vos donnees en nous ecrivant a info@exitmediagroup.com."
+    }
+  ]
+}

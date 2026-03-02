@@ -20,4 +20,4 @@
 
 ## TODOS
 
-- Corriger le bas des dominos dans le display 3D cote droit
+- TODO: Definir Favicon ?

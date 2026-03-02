@@ -1,0 +1,204 @@
+---
+import "../../styles/global.css";
+import { getTypedHomePageContent } from "../../content/home";
+import { getTypedSitePageContent } from "../../content/site-pages";
+import type { Locale } from "../../lib/i18n";
+import PageFrame from "../ui/PageFrame.astro";
+import type { SitePageKey } from "../../lib/content-types";
+import SiteHeader from "../ui/SiteHeader.astro";
+import Section09Footer from "../../sections/Section09Footer.astro";
+
+interface Props {
+  locale: Locale;
+  pageKey: SitePageKey;
+}
+
+const { locale, pageKey } = Astro.props;
+const page = await getTypedSitePageContent(locale, pageKey);
+
+const isContactPage = pageKey === "contact";
+const isProjectsPage = pageKey === "projects";
+const homeContent = await getTypedHomePageContent(locale);
+
+const projectItems = isProjectsPage
+  ? homeContent.sections.section06.projects
+  : [];
+---
+
+<PageFrame
+  locale={locale}
+  title={page.seo.title}
+  description={page.seo.description}
+>
+  <SiteHeader
+    locale={locale}
+    navigation={homeContent.sections.section01.topNav}
+    isHomepage={false}
+  />
+
+  <main class="content-main">
+    <section class="content-hero">
+      <p class="type-kicker">{page.kicker}</p>
+      <h1 class="type-display">{page.title}</h1>
+      <p class="content-hero__intro">{page.intro}</p>
+    </section>
+
+    <section class="content-grid">
+      {
+        page.sections.map((section) => (
+          <article class="surface-panel content-card">
+            <h2>{section.heading}</h2>
+            <p>{section.body}</p>
+          </article>
+        ))
+      }
+    </section>
+
+    {isProjectsPage && (
+      <section class="projects-grid">
+        {projectItems.map((project, index) => (
+          <article class="surface-panel project-card">
+            <p class="project-card__index">{String(index + 1).padStart(2, "0")}</p>
+            <h3>{project.name}</h3>
+            <p>{project.tagline}</p>
+            <p class="project-card__services">{project.services.join(" · ")}</p>
+          </article>
+        ))}
+      </section>
+    )}
+
+    {isContactPage && (
+      <section class="surface-panel contact-panel">
+        <h2>{page.contactPanel?.heading}</h2>
+        <p>{page.contactPanel?.intro}</p>
+        <button
+          type="button"
+          class="contact-panel__open"
+          data-contact-modal-open-target="footer-form"
+        >
+          {locale === "fr" ? "Ouvrir le formulaire" : "Open contact form"}
+        </button>
+      </section>
+    )}
+  </main>
+  <Section09Footer section={homeContent.sections.section09} locale={locale} />
+</PageFrame>
+
+<style>
+  .content-main {
+    width: min(100%, 80rem);
+    margin: 0 auto;
+    padding: clamp(6rem, 9vw, 7.5rem) clamp(1rem, 2.4vw, 2rem) clamp(3rem, 7vw, 5rem);
+    display: grid;
+    gap: clamp(1.5rem, 3vw, 2.5rem);
+  }
+
+  .content-hero h1 {
+    margin: 0.8rem 0 1rem;
+    max-width: 16ch;
+  }
+
+  .content-hero__intro {
+    margin: 0;
+    max-width: 62ch;
+    color: var(--color-text-secondary);
+  }
+
+  .content-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    gap: 1rem;
+  }
+
+  .content-card {
+    padding: 1.15rem;
+  }
+
+  .content-card h2 {
+    margin: 0 0 0.6rem;
+    font-family: var(--font-family-display);
+    font-size: 1.1rem;
+  }
+
+  .content-card p {
+    margin: 0;
+    color: var(--color-text-secondary);
+  }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    gap: 1rem;
+  }
+
+  .project-card {
+    padding: 1rem;
+  }
+
+  .project-card__index {
+    margin: 0 0 0.5rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-accent-tertiary);
+  }
+
+  .project-card h3 {
+    margin: 0;
+    font-family: var(--font-family-display);
+    font-size: 1rem;
+  }
+
+  .project-card p {
+    margin: 0.5rem 0 0;
+    color: var(--color-text-secondary);
+  }
+
+  .project-card__services {
+    font-size: 0.84rem;
+    color: var(--color-text-muted);
+  }
+
+  .contact-panel {
+    padding: 1.2rem;
+  }
+
+  .contact-panel h2 {
+    margin: 0;
+    font-family: var(--font-family-display);
+  }
+
+  .contact-panel > p {
+    margin: 0.55rem 0 1.2rem;
+    color: var(--color-text-secondary);
+  }
+
+  .contact-panel__open {
+    align-self: flex-start;
+    margin-top: var(--space-xs);
+    padding: var(--space-md) var(--space-2xl);
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: var(--radius-md);
+    color: var(--color-text-primary);
+    font-family: var(--font-family-display);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition:
+      border-color var(--motion-duration-fast) var(--motion-ease-standard),
+      color var(--motion-duration-fast) var(--motion-ease-standard),
+      background var(--motion-duration-fast) var(--motion-ease-standard),
+      transform var(--motion-duration-fast) var(--motion-ease-standard);
+  }
+
+  .contact-panel__open:hover {
+    border-color: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    transform: translateY(-1px);
+  }
+
+</style>
