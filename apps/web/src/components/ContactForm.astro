@@ -1,7 +1,4 @@
 ---
-import { actions } from "astro:actions";
-import { isInputError } from "astro:actions";
-
 interface FormLabels {
   nameLabel: string;
   emailLabel: string;
@@ -12,7 +9,7 @@ interface FormLabels {
 interface Props {
   formLabels: FormLabels;
   locale: "fr" | "en";
-  result?: Awaited<ReturnType<typeof actions.sendContact>>;
+  recipientEmail?: string;
   triggerLabel?: string;
   showTrigger?: boolean;
   modalId?: string;
@@ -21,14 +18,11 @@ interface Props {
 const {
   formLabels,
   locale,
-  result,
+  recipientEmail = "hello@exitmediagroup.com",
   triggerLabel,
   showTrigger = true,
   modalId = "footer-form",
 } = Astro.props;
-const hasError = result?.error;
-const hasSuccess = result?.data?.success;
-const inputErrors = isInputError(hasError) ? hasError.fields : {};
 const resolvedTriggerLabel =
   triggerLabel ?? (locale === "fr" ? "Nous contacter" : "Contact us");
 ---
@@ -62,25 +56,21 @@ const resolvedTriggerLabel =
         ×
       </button>
     </div>
-    {hasSuccess && (
-      <p class="contact-form__success" role="status">
-        {locale === "fr"
-          ? "Votre message a bien ete envoye. Nous vous repondrons rapidement."
-          : "Your message has been sent. We will get back to you soon."}
-      </p>
-    )}
-    {hasError && !isInputError(hasError) && (
-      <p class="contact-form__error" role="alert">
-        {hasError.message}
-      </p>
-    )}
+    <p class="contact-form__success" role="status" data-contact-success hidden>
+      {locale === "fr"
+        ? "Votre message est pret. Finalisez l'envoi dans votre application email."
+        : "Your message is ready. Finish sending it from your email app."}
+    </p>
+    <p class="contact-form__error" role="alert" data-contact-error hidden>
+      {locale === "fr"
+        ? "Impossible d'ouvrir votre application email. Merci d'ecrire a l'adresse ci-dessous."
+        : "Could not open your email app. Please write to the address below."}
+    </p>
     <form
-      method="POST"
-      action={`${actions.sendContact}#${modalId}`}
+      method="dialog"
       class="contact-form__form"
       data-contact-form-id={modalId}
-      data-contact-has-error={hasError ? "true" : "false"}
-      data-contact-has-success={hasSuccess ? "true" : "false"}
+      data-contact-recipient={recipientEmail}
       aria-label={locale === "fr" ? "Formulaire de contact" : "Contact form"}
     >
       <input type="hidden" name="locale" value={locale} />
@@ -93,14 +83,7 @@ const resolvedTriggerLabel =
           required
           autocomplete="name"
           class="contact-form__input"
-          aria-describedby={inputErrors.name ? `${modalId}-name-error` : undefined}
-          aria-invalid={!!inputErrors.name}
         />
-        {inputErrors?.name && (
-          <span id={`${modalId}-name-error`} class="contact-form__field-error">
-            {inputErrors.name.join(", ")}
-          </span>
-        )}
       </div>
       <div class="contact-form__field">
         <label for={`${modalId}-email`}>{formLabels.emailLabel}</label>
@@ -111,14 +94,7 @@ const resolvedTriggerLabel =
           required
           autocomplete="email"
           class="contact-form__input"
-          aria-describedby={inputErrors.email ? `${modalId}-email-error` : undefined}
-          aria-invalid={!!inputErrors.email}
         />
-        {inputErrors?.email && (
-          <span id={`${modalId}-email-error`} class="contact-form__field-error">
-            {inputErrors.email.join(", ")}
-          </span>
-        )}
       </div>
       <div class="contact-form__field">
         <label for={`${modalId}-message`}>{formLabels.messageLabel}</label>
@@ -128,14 +104,7 @@ const resolvedTriggerLabel =
           required
           rows={4}
           class="contact-form__input contact-form__textarea"
-          aria-describedby={inputErrors.message ? `${modalId}-message-error` : undefined}
-          aria-invalid={!!inputErrors.message}
         />
-        {inputErrors?.message && (
-          <span id={`${modalId}-message-error`} class="contact-form__field-error">
-            {inputErrors.message.join(", ")}
-          </span>
-        )}
       </div>
       <button type="submit" class="contact-form__submit">
         {formLabels.submitLabel}
@@ -146,6 +115,15 @@ const resolvedTriggerLabel =
 
 <script>
   const setupContactModal = () => {
+    const messages = {
+      fr: {
+        subject: "Nouveau message depuis exitMediaGroup",
+      },
+      en: {
+        subject: "New message from exitMediaGroup",
+      },
+    } as const;
+
     const getDraftKey = (id: string) => `contact-form-draft:${id}`;
     const readDraft = (id: string): Partial<Record<"name" | "email" | "message", string>> => {
       try {
@@ -182,27 +160,59 @@ const resolvedTriggerLabel =
       const nameInput = form.querySelector<HTMLInputElement>('input[name="name"]');
       const emailInput = form.querySelector<HTMLInputElement>('input[name="email"]');
       const messageInput = form.querySelector<HTMLTextAreaElement>('textarea[name="message"]');
+      const localeInput = form.querySelector<HTMLInputElement>('input[name="locale"]');
+      const successEl = form.parentElement?.querySelector<HTMLElement>("[data-contact-success]");
+      const errorEl = form.parentElement?.querySelector<HTMLElement>("[data-contact-error]");
+      const recipient = form.getAttribute("data-contact-recipient") ?? "";
 
-      const hasError = form.getAttribute("data-contact-has-error") === "true";
-      const hasSuccess = form.getAttribute("data-contact-has-success") === "true";
+      const draft = readDraft(id);
+      if (nameInput && draft.name) nameInput.value = draft.name;
+      if (emailInput && draft.email) emailInput.value = draft.email;
+      if (messageInput && draft.message) messageInput.value = draft.message;
 
-      if (hasSuccess) {
-        clearDraft(id);
-      }
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
 
-      if (hasError) {
-        const draft = readDraft(id);
-        if (nameInput && draft.name) nameInput.value = draft.name;
-        if (emailInput && draft.email) emailInput.value = draft.email;
-        if (messageInput && draft.message) messageInput.value = draft.message;
-      }
+        successEl?.setAttribute("hidden", "");
+        errorEl?.setAttribute("hidden", "");
 
-      form.addEventListener("submit", () => {
+        if (!recipient || !nameInput || !emailInput || !messageInput || !localeInput) {
+          errorEl?.removeAttribute("hidden");
+          return;
+        }
+
+        if (!form.reportValidity()) return;
+
         writeDraft(id, {
           name: nameInput?.value ?? "",
           email: emailInput?.value ?? "",
           message: messageInput?.value ?? "",
         });
+
+        const locale = localeInput.value === "en" ? "en" : "fr";
+        const subject = messages[locale].subject;
+        const body = [
+          locale === "fr" ? "Nom" : "Name",
+          `: ${nameInput.value}`,
+          "\n",
+          locale === "fr" ? "Email" : "Email",
+          `: ${emailInput.value}`,
+          "\n\n",
+          locale === "fr" ? "Message" : "Message",
+          ":\n",
+          messageInput.value,
+        ].join("");
+
+        const mailtoHref = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+        try {
+          window.location.href = mailtoHref;
+          clearDraft(id);
+          form.reset();
+          successEl?.removeAttribute("hidden");
+        } catch {
+          errorEl?.removeAttribute("hidden");
+        }
       });
     });
 
@@ -407,21 +417,10 @@ const resolvedTriggerLabel =
     outline: none;
   }
 
-  .contact-form__input[aria-invalid="true"] {
-    border-color: rgba(239, 68, 68, 0.6);
-    box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.15);
-  }
-
   .contact-form__textarea {
     resize: vertical;
     min-height: 6.5rem;
     padding-top: var(--space-md);
-  }
-
-  .contact-form__field-error {
-    font-size: 0.8125rem;
-    color: #fca5a5;
-    margin-top: var(--space-2xs);
   }
 
   .contact-form__submit {

@@ -1,5 +1,4 @@
 ---
-import { actions } from "astro:actions";
 import ContactForm from "../components/ContactForm.astro";
 import type { HomeSectionByKey } from "../lib/content-types";
 import type { Locale } from "../lib/i18n";
@@ -10,7 +9,6 @@ interface Props {
 }
 
 const { section, locale } = Astro.props;
-const result = Astro.getActionResult(actions.sendContact);
 const navLinks = section.navLinks ?? [];
 ---
 
@@ -105,7 +103,7 @@ const navLinks = section.navLinks ?? [];
           <ContactForm
             formLabels={section.formLabels}
             locale={locale}
-            result={result}
+            recipientEmail={section.email}
             showTrigger={false}
             modalId="footer-form"
           />
